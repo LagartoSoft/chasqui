@@ -1,41 +1,36 @@
 # chasqui
 
 Mapa de ciclovías del Perú para Android. Te muestra dónde están las vías ciclistas, dónde estás
-vos, hacia dónde mirás y a cuánto vas.
+vos, hacia dónde mirás, a cuánto vas y cuánto llevás recorrido.
 
 Los chasquis llevaban mensajes corriendo por la red de caminos incas. Esta app hace lo mismo con
 la red de ciclovías: te dice por dónde se puede.
 
-**Funciona en cualquier Android, con servicios de Google o sin ellos.** Es la diferencia con la
-mayoría: la ubicación sale del proveedor del sistema y no del de Google, así que un Huawei
-posterior a 2019 la usa igual.
+**Anda en cualquier Android, con servicios de Google o sin ellos.** La ubicación sale del
+proveedor del sistema y no del de Google, así que un Huawei posterior a 2019 la usa igual.
 
 ## Qué hace
 
-- **La red ciclista del Perú entera**, 2320 tramos, en tres colores: vía propia en verde continuo,
-  carril pintado en verde punteado, compartida con autos en ámbar punteado.
-- **Dónde estás**, con el círculo de precisión del GPS.
-- **Hacia dónde mirás**, con un cono que sigue la brújula.
-- **Un botón** que hace que el mapa te siga y gire para que arriba sea siempre hacia donde vas.
-- **Velocímetro** en km/h.
-- **Recorridos**: empezás, pedaleás, terminás, y te muestra distancia, tiempo y media.
-- **La pantalla no se apaga**, porque el teléfono va en el manubrio.
+- La red ciclista del Perú entera, **2320 tramos**, en tres trazos: vía propia continua, carril
+  pintado punteado, compartida con autos en ámbar.
+- Dónde estás, con el círculo de precisión del GPS y un cono que sigue la brújula.
+- Un botón que hace que el mapa te siga y gire hacia donde mirás.
+- Velocímetro en km/h.
+- Recorridos: empezás, pedaleás, terminás, y te da distancia, tiempo y media.
+- La pantalla no se apaga, porque el teléfono va en el manubrio.
 
 ## Qué no hace, a propósito
 
-- **No tiene servidor.** La red ciclista viaja dentro del APK: son 66 KB. No hay API que se caiga,
-  ni base de datos, ni nada que pagar.
-- No calcula rutas de A a B. Eso necesita un motor de ruteo, y un motor de ruteo necesita servidor.
-- No guarda los recorridos. El resumen se ve una vez y se va; no hay historial ni cuentas.
-- **El recorrido solo se mide con la app abierta.** La ubicación de MapLibre es de primer plano:
-  si bloqueás la pantalla o salís de la app, la distancia deja de sumar. Medir con la pantalla
-  apagada necesita el permiso de ubicación «todo el tiempo», y eso todavía no está.
-- No busca lugares por nombre.
-- No funciona en iOS.
+- **No tiene servidor.** La red viaja dentro del APK: son 66 KB comprimidos. Nada que se caiga,
+  nada que pagar.
+- **No mide con la pantalla apagada.** La ubicación de MapLibre es de primer plano; si salís de
+  la app, la distancia deja de sumar. Hacerlo bien necesita el permiso de ubicación «todo el
+  tiempo».
+- No guarda los recorridos: el resumen se ve una vez y se va.
+- No calcula rutas de A a B. Eso necesita un motor de ruteo, y eso necesita servidor.
+- No busca lugares por nombre. No tiene cuentas. No corre en iOS.
 
-**El mapa de fondo sí necesita señal.** Las ciclovías no: ya están en el teléfono.
-
-Cómo se escriben los commits y los comentarios acá: [`CONVENTIONS.md`](CONVENTIONS.md).
+El mapa de fondo sí necesita señal. Las ciclovías no: ya están en el teléfono.
 
 ## Correrlo
 
@@ -43,82 +38,51 @@ Hace falta [Bun](https://bun.sh) y el SDK de Android.
 
 ```sh
 bun install
-bun run prebuild        # genera android/, una sola vez
-bun run android         # build de desarrollo, con Metro
+bun run prebuild     # genera android/, una sola vez
+bun run android      # build de desarrollo, con Metro
+bun run check        # biome + tsc, antes de subir nada
 ```
 
-Para el APK que se instala y anda solo:
+El APK que se instala y anda solo sale fechado en `build/`:
 
 ```sh
 bun run apk
-adb install -r android/app/build/outputs/apk/release/app-release.apk
+adb install -r build/chasqui-1.0.0-*.apk
 ```
 
-Ese script lleva un flag que conviene entender:
+Si `prebuild` dice que `@maplibre/maplibre-react-native` no tiene un config plugin válido, faltan
+las dependencias: corré `bun install`.
 
-```
--PreactNativeArchitectures=arm64-v8a,armeabi-v7a
-```
+## Los datos
 
-Se lee **`-P`** (así define Gradle una propiedad) más **`reactNativeArchitectures`**. Limita para
-qué procesadores se compilan las librerías nativas. Por defecto compila cuatro, y dos de ellas
-—`x86` y `x86_64`— solo las usa un emulador: son **62 MB de los 138** que pesaba el APK antes de
-poner esto. Todos los teléfonos Android del mundo son ARM.
+`assets/cycleways.json` es una foto de OpenStreetMap, sacada del extracto de Perú de Geofabrik y
+clasificada en tres tipos, con las coordenadas redondeadas a un metro.
 
-El valor por defecto vive en `android/gradle.properties`, pero `android/` se regenera en cada
-`prebuild`, así que el flag va en el comando y no en el archivo.
+Actualizarla es reemplazar ese archivo y compilar de nuevo. No hay otra forma, y es el precio de
+no tener servidor.
 
-Antes de subir nada:
-
-```sh
-bun run check           # biome + tsc
-```
-
-Si `prebuild` se queja de que `@maplibre/maplibre-react-native` **no contiene un config plugin
-válido** y habla de un `Unexpected token 'typeof'`, es que no están las dependencias: sin
-`lib/commonjs` compilado, Expo cae al `.ts` del código fuente y Node no sabe leerlo. Corré
-`bun install` y volvé a intentar.
-
-## De dónde salen los datos
-
-`assets/cycleways.json` es una foto de la red ciclista de OpenStreetMap, sacada del extracto de
-Perú de Geofabrik y clasificada en tres tipos. Las coordenadas van redondeadas a cinco decimales,
-que es alrededor de un metro.
-
-Actualizarla es reemplazar ese archivo y compilar un APK nuevo. No hay forma de actualizarla sin
-recompilar, y es a propósito: es el precio de no tener servidor.
-
-Los datos son de OpenStreetMap y sus colaboradores, bajo [ODbL](https://opendatacommons.org/licenses/odbl/).
+Datos de OpenStreetMap y sus colaboradores, bajo [ODbL](https://opendatacommons.org/licenses/odbl/).
 
 ## Diseño
 
-Toma el lenguaje de [lagartosoft.org](https://lagartosoft.org): **Geist**, superficies
-monocromas, bordes de un píxel y esquinas de 2 a 6 píxeles. Nada de sombras y nada de pastillas
-redondeadas.
+Bun · Expo Router · MapLibre Native · NativeWind sobre Tailwind · Geist · Feather · Biome.
+Sin backend, sin base de datos, sin cliente HTTP, sin librería de estado.
 
-La interfaz no tiene ningún color de acento a propósito: **el único color en pantalla es la red
-ciclista**, que es el dato. Los valores viven en `lib/theme.ts` porque MapLibre necesita
-literales.
+Toma el lenguaje de [lagartosoft.org](https://lagartosoft.org): **Geist**, superficies monocromas,
+bordes de un píxel, esquinas de 2 a 6. Nada de sombras ni de pastillas redondeadas.
 
-Los iconos son Feather, de `@expo/vector-icons`: trazo de dos píxeles y nada más.
+**El verde se gasta en tres sitios y en ninguno más**: la red ciclista, la acción principal y el
+mando activo. Todo lo demás es gris. Si el verde se repartiera por la interfaz dejaría de
+significar «ciclovía», que es el trabajo que tiene que hacer en un mapa que se mira un segundo.
+Los valores viven en `lib/theme.ts` y `lib/map.ts` porque MapLibre necesita literales.
 
-## Stack
-
-Bun · Expo Router · MapLibre Native · NativeWind 5 sobre Tailwind 4 · Geist · Feather · Biome.
-
-Sin backend, sin base de datos, sin cliente HTTP, sin librería de estado. No hacen falta.
-
-## El icono
-
-`assets/icon.svg` es la fuente: una **greca escalonada** andina, que además se lee como un camino
-subiendo terrazas. Los dos PNG se regeneran desde ahí con `rsvg-convert` — el comando está dentro
-del propio SVG.
-
-Todo el trazo entra en el 61% central del lienzo. No es estética: Android recorta el icono con
-una máscara circular y lo que quede fuera desaparece.
+El icono es una **greca escalonada** andina, que además se lee como un camino subiendo terrazas.
+La fuente es `assets/icon.svg` y los PNG se regeneran desde ahí; el comando está dentro del SVG.
+Todo el trazo entra en el 61% central: Android recorta con una máscara circular y lo de fuera
+desaparece.
 
 ## Pendiente
 
-- Elegir licencia del repositorio.
-- Firmar el APK con un keystore propio. Hoy va con la clave de depuración de Expo, así que sirve
-  para probarlo y para nada más: un APK firmado con otra clave no se instala encima del anterior.
+- Elegir licencia.
+- Firmar con un keystore propio. Hoy va con la clave de depuración de Expo: sirve para probarlo y
+  para nada más, porque un APK firmado con otra clave no se instala encima del anterior.
