@@ -36,6 +36,6 @@ export const LABEL = {
   fontFamily: FONT.medium,
   fontSize: 10,
   letterSpacing: 1.4,
-  // A diez píxeles y al sol, INK_MUTED da 3,6:1 y no se lee. Este da 7,7:1
+  // A diez píxeles y al sol hace falta contraste: INK_MUTED da 3,6:1 y este 7,7:1
   color: INK_SECONDARY,
 } as const

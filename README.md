@@ -10,7 +10,7 @@ la red de ciclovías: te dice por dónde se puede.
 proveedor del sistema y no del de Google, así que un Huawei posterior a 2019 la usa igual.
 
 <p align="center">
-  <img src="assets/mockup.png" alt="La app midiendo un recorrido sobre la red ciclista de San Borja" width="320">
+  <img src="docs/mockup.png" alt="La app midiendo un recorrido sobre la red ciclista de San Borja" width="320">
 </p>
 
 ## Qué hace
@@ -81,8 +81,8 @@ mando activo. Todo lo demás es gris. Si el verde se repartiera por la interfaz 
 significar «ciclovía», que es el trabajo que tiene que hacer en un mapa que se mira un segundo.
 Los valores viven en `lib/theme.ts` y `lib/map.ts` porque MapLibre necesita literales.
 
-La imagen de arriba se dibuja desde el repo: los trazos son los tramos reales de San Borja que
-hay en `assets/cycleways.json`, y los colores, grosores y tamaños salen de `lib/theme.ts` y
+`docs/mockup.png` se dibuja desde el repo: los trazos son los tramos reales de San Borja que hay
+en `assets/cycleways.json`, y los colores, grosores y tamaños salen de `lib/theme.ts` y
 `lib/map.ts`. Si el diseño cambia, la imagen queda vieja y hay que rehacerla.
 
 El icono es una **greca escalonada** andina, que además se lee como un camino subiendo terrazas.

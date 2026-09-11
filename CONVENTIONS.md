@@ -41,6 +41,7 @@ puesto a ojo, una decisión que sorprendería.
 
 - **Una sola línea, siempre.** Si no entra, el problema es el código: ponele otro nombre o partilo.
 - **Nunca parafrasees la línea de abajo.**
+- **En presente y como regla**, no como relato. Qué hace y por qué, nunca qué pasó antes.
 - Sin prefijos ni etiquetas: la frase se explica sola.
 
 ```ts
@@ -65,7 +66,8 @@ necesita es otro nombre. La excepción es una trampa de la plataforma, que se an
 app/          las dos pantallas. Solo componen: no calculan nada
 components/   lo que se ve. Un archivo por pieza
 lib/          los hooks y los datos. Acá pasa todo lo que piensa
-assets/       la red ciclista, la fuente y el icono
+assets/       solo lo que viaja dentro del APK: la red, la fuente y el icono
+docs/         imágenes del README. No entran en la app
 scripts/      apk.sh
 ```
 
@@ -105,6 +107,14 @@ píxel, esquinas de 2 a 6. Nada de sombras ni de pastillas redondeadas.
 
 **El verde se gasta en tres sitios**: la red ciclista, la acción principal y lo que está activo.
 Nada más. Repartido por la interfaz dejaría de significar «ciclovía».
+
+## Los `.md`
+
+`AGENTS.md` y `CLAUDE.md` son enlaces a este archivo: los agentes de IA leen esos nombres y así
+no hay dos versiones de las mismas reglas.
+
+Biome todavía no formatea markdown, así que va a mano: **100 columnas**, `-` para las listas, y
+una línea en blanco entre bloques. No se agrega otra herramienta solo para esto.
 
 ## Antes de subir
 

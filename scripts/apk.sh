@@ -4,7 +4,7 @@ set -euo pipefail
 
 cd "$(dirname "$0")/.."
 
-# Solo ARM: x86 y x86_64 las usa un emulador y pesan 62 MB de los 138.
+# Solo ARM: x86 y x86_64 las usa un emulador y son casi la mitad del peso del APK.
 android/gradlew -p android assembleRelease -PreactNativeArchitectures=arm64-v8a,armeabi-v7a
 
 version=$(node -p "require('./app.json').expo.version")
