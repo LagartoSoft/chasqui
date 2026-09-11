@@ -21,6 +21,8 @@ export const LANE_COLOR = '#0E9F6E'
 export const SHARED_COLOR = '#D97706'
 /** Halo blanco por debajo, para que la línea no se pierda sobre el mapa base. */
 export const CASING_COLOR = '#FFFFFF'
+/** Azul: en este mapa el verde y el ámbar ya son la red ciclista. */
+export const RIDER_COLOR = '#2563EB'
 
 type LineWidth = NonNullable<NonNullable<LineLayerSpecification['paint']>['line-width']>
 

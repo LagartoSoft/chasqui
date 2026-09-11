@@ -2,6 +2,8 @@ import { Camera, GeoJSONSource, Layer, Map as MapView } from '@maplibre/maplibre
 import { StyleSheet, Text, View } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import cycleways from '../assets/cycleways.json'
+import { RiderPuck } from '../components/rider-puck.tsx'
+import { useCurrentLocation } from '../lib/location.ts'
 import {
   CASING_COLOR,
   CASING_WIDTH,
@@ -23,6 +25,11 @@ import {
 const INITIAL_ZOOM = 14
 
 export default function MapScreen() {
+  const { permission, point, accuracyM } = useCurrentLocation()
+
+  const notice =
+    permission === 'denied' ? 'Sin permiso de ubicación no se puede mostrar dónde estás.' : null
+
   return (
     <View className="flex-1">
       <MapView style={StyleSheet.absoluteFill} mapStyle={MAP_STYLE_URL} attribution logo={false}>
@@ -73,6 +80,7 @@ export default function MapScreen() {
             paint={{ 'line-color': TRACK_COLOR, 'line-width': TRACK_WIDTH }}
           />
         </GeoJSONSource>
+        {point ? <RiderPuck point={point} accuracyM={accuracyM} /> : null}
       </MapView>
 
       <SafeAreaView className="absolute inset-x-0 top-0" pointerEvents="none">
@@ -102,6 +110,13 @@ export default function MapScreen() {
           </View>
         </View>
       </SafeAreaView>
+      {notice ? (
+        <SafeAreaView className="absolute inset-x-0 bottom-0" pointerEvents="none">
+          <View className="mx-3.5 mb-3.5 rounded-2xl bg-neutral-950/90 px-4 py-3">
+            <Text className="text-[12px] leading-4 text-neutral-300">{notice}</Text>
+          </View>
+        </SafeAreaView>
+      ) : null}
     </View>
   )
 }
