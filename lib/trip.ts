@@ -54,7 +54,7 @@ type TripInput = {
 /**
  * Mide un recorrido mientras la app esté delante.
  *
- * @remarks No sobrevive a que se bloquee la pantalla: la ubicación de MapLibre
+ * No sobrevive a que se bloquee la pantalla: la ubicación de MapLibre
  * es solo de primer plano. Nada se guarda al terminar.
  */
 export function useTrip({ point, accuracyM }: TripInput): Trip {

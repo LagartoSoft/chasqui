@@ -39,7 +39,7 @@ export type Heading = {
 /**
  * Sigue hacia dónde apunta el teléfono, suavizado para que el cono no tiemble.
  *
- * @remarks Única cosa que sigue saliendo de `expo-location`: el rumbo lo da
+ * Única cosa que sigue saliendo de `expo-location`: el rumbo lo da
  * `SensorManager` y no pasa por Google, así que funciona sin Play Services.
  */
 export function useHeading(enabled: boolean): Heading {

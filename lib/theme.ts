@@ -1,7 +1,7 @@
 /**
  * Los valores de diseño, tomados de lagartosoft.org.
  *
- * @remarks Monocromo y con esquinas casi rectas: el único color en pantalla
+ * Monocromo y con esquinas casi rectas: el único color en pantalla
  * son los datos del mapa. MapLibre necesita literales, así que viven acá.
  */
 

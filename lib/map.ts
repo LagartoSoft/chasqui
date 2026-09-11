@@ -16,7 +16,7 @@ export const IS_SHARED: FilterSpecification = ['==', ['get', 'kind'], 'shared']
 /**
  * La red usa dos tonos, no tres: el tipo de separación lo dice el guionado.
  *
- * @remarks Van rebajados y profundos a propósito. La interfaz es monocroma,
+ * Van rebajados y profundos a propósito. La interfaz es monocroma,
  * así que estos son el único color del producto y no pueden gritar.
  */
 export const TRACK_COLOR = '#0A7C63'

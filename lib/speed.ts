@@ -3,7 +3,7 @@ import { useEffect, useRef, useState } from 'react'
 /**
  * Peso de la lectura nueva frente a la acumulada, entre 0 y 1.
  *
- * @remarks El mismo problema que la brújula: la velocidad del GPS salta
+ * El mismo problema que la brújula: la velocidad del GPS salta
  * un par de km/h de una lectura a otra y el número quedaría ilegible.
  */
 const SMOOTHING = 0.3

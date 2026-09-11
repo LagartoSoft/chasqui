@@ -46,11 +46,11 @@ them.
 **El código se lee solo.** Los nombres y los tipos son la documentación. El comentario es la
 excepción, no el acompañamiento.
 
-Orden de preferencia: **tipos > nombres > extraer una función > TSDoc > comentario inline.**
+Orden de preferencia: **tipos > nombres > extraer una función > comentario inline.**
 
 | En inglés | En español |
 |---|---|
-| Identificadores, archivos, carpetas, commits | Comentarios y TSDoc |
+| Identificadores, archivos, carpetas, commits | Comentarios |
 | | Todo texto que ve el usuario |
 
 ### Comentarios
@@ -76,11 +76,6 @@ setDistanceM((total) => total + step)
 // ! En Android userInteraction también es true en nuestras animaciones:
 // ! lo que las separa es animated (CameraChangeTracker.kt)
 ```
-
-### TSDoc
-
-Solo lo que los tipos no expresan. `@remarks` para efectos no obvios, `@throws` siempre que
-lance. Nunca repitas la firma en un `@param`.
 
 ### Dónde sí conviene comentar
 

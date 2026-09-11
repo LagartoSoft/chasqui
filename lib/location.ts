@@ -25,7 +25,7 @@ export type CurrentLocation = {
 /**
  * Sigue la posición del ciclista con el motor de ubicación de MapLibre.
  *
- * @remarks No usa `expo-location`: ese le habla solo al proveedor fusionado de
+ * No usa `expo-location`: ese le habla solo al proveedor fusionado de
  * Google y calla en un teléfono sin Play Services. Este usa el del sistema.
  */
 export function useCurrentLocation(): CurrentLocation {

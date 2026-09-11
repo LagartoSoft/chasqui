@@ -11,7 +11,7 @@ const EASE_MS = 300
 /**
  * Grados que tiene que girar el rumbo para mover el mapa.
  *
- * @remarks El filtro de la brújula entrega un valor nuevo cada 50 ms. Sin
+ * El filtro de la brújula entrega un valor nuevo cada 50 ms. Sin
  * umbral el mapa recibiría veinte animaciones por segundo.
  */
 const MIN_BEARING_DELTA_DEG = 3
@@ -42,7 +42,7 @@ type FollowCameraOptions = {
 /**
  * Mantiene la cámara sobre el ciclista mientras el modo lo pida.
  *
- * @remarks Arranca siguiendo, así el primer fix del GPS ya centra el mapa.
+ * Arranca siguiendo, así el primer fix del GPS ya centra el mapa.
  */
 export function useFollowCamera({
   cameraRef,

@@ -1,7 +1,7 @@
 /**
  * Funciones puras de geometría, copiadas de `packages/geo` de tupu.
  *
- * @remarks Copiadas y no compartidas a propósito: son cincuenta líneas y este
+ * Copiadas y no compartidas a propósito: son cincuenta líneas y este
  * repo no tiene workspaces. Si divergen, que diverjan.
  */
 
@@ -18,7 +18,7 @@ export function normalizeDegrees(degrees: number): number {
 /**
  * Diferencia más corta entre dos ángulos, en el rango [-180, 180].
  *
- * @remarks Es lo que evita que la brújula gire 350° para corregir 10° al cruzar el norte.
+ * Es lo que evita que la brújula gire 350° para corregir 10° al cruzar el norte.
  */
 export function angleDeltaDegrees(from: number, to: number): number {
   return ((to - from + 540) % 360) - 180
@@ -27,14 +27,14 @@ export function angleDeltaDegrees(from: number, to: number): number {
 /**
  * Peso de la lectura nueva frente al valor acumulado en cada paso, entre 0 y 1.
  *
- * @remarks Se afina en la calle: más peso tiembla, menos peso va con retraso.
+ * Se afina en la calle: más peso tiembla, menos peso va con retraso.
  */
 export const HEADING_SMOOTHING = 0.2
 
 /**
  * Suaviza el rumbo de la brújula con un filtro paso bajo exponencial.
  *
- * @remarks Promedia seno y coseno, no los grados: entre 359° y 1° la media
+ * Promedia seno y coseno, no los grados: entre 359° y 1° la media
  * aritmética da 180° y la brújula pega la vuelta entera al cruzar el norte.
  */
 export function smoothHeadingDegrees(
@@ -59,7 +59,7 @@ const EARTH_RADIUS_M = 6_371_008.8
 /**
  * Distancia entre dos puntos sobre la superficie, en metros.
  *
- * @remarks Haversine. A escala de una ciudad el error frente a una elipsoide
+ * Haversine. A escala de una ciudad el error frente a una elipsoide
  * es de centímetros, y cuesta una fracción de lo que cuesta Vincenty.
  */
 export function distanceMeters(from: Point, to: Point): number {
