@@ -35,6 +35,8 @@ posterior a 2019 la usa igual.
 
 **El mapa de fondo sí necesita señal.** Las ciclovías no: ya están en el teléfono.
 
+Cómo se escriben los commits y los comentarios acá: [`CONVENTIONS.md`](CONVENTIONS.md).
+
 ## Correrlo
 
 Hace falta [Bun](https://bun.sh) y el SDK de Android.
