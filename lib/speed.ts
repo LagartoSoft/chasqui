@@ -11,7 +11,7 @@ const SMOOTHING = 0.3
 /**
  * Por debajo de esto se muestra parado, en km/h.
  *
- * WHY El GPS nunca da cero exacto: quieto en un semáforo sigue reportando
+ * El GPS nunca da cero exacto: quieto en un semáforo sigue reportando
  * dos o tres km/h de deriva, y un velocímetro que nunca baja a cero miente.
  */
 const STOPPED_KMH = 2

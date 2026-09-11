@@ -4,7 +4,7 @@ import { distanceMeters, type Point } from './geo.ts'
 /**
  * Precisión peor que esto y la posición se descarta, en metros.
  *
- * WHY El primer fix que entrega Android suele ser la última posición conocida
+ * El primer fix que entrega Android suele ser la última posición conocida
  * —tu casa, esta mañana— y sumaría kilómetros que nadie pedaleó.
  */
 const MAX_ACCURACY_M = 20
@@ -12,7 +12,7 @@ const MAX_ACCURACY_M = 20
 /**
  * Tramo mínimo que cuenta como avance, en metros.
  *
- * WHY Parado en un semáforo el GPS baila tres o cuatro metros. Sin este piso,
+ * Parado en un semáforo el GPS baila tres o cuatro metros. Sin este piso,
  * diez minutos de espera regalan cien metros.
  */
 const MIN_STEP_M = 5
@@ -20,7 +20,7 @@ const MIN_STEP_M = 5
 /**
  * Tramo máximo creíble entre dos posiciones, en metros.
  *
- * ! Un fix malo bajo un puente teletransporta cientos de metros de golpe.
+ * Un fix malo bajo un puente teletransporta cientos de metros de golpe.
  */
 const MAX_STEP_M = 200
 
@@ -85,7 +85,8 @@ export function useTrip({ point, accuracyM }: TripInput): Trip {
     const previous = lastPoint.current
     lastPoint.current = point
 
-    // La primera posición buena solo fija el origen: todavía no hay tramo
+    // La primera posición buena solo fija el origen: medir contra la
+    // anterior sumaría el trecho que se recorrió antes de empezar
     if (!previous) return
 
     const step = distanceMeters(previous, point)
@@ -106,7 +107,7 @@ export function useTrip({ point, accuracyM }: TripInput): Trip {
   const pause = useCallback(() => {
     banked.current = readClock()
     startedAt.current = null
-    // ! Olvidar el origen evita que la pausa entera cuente como un tramo
+    // Olvidar el origen evita que la pausa entera cuente como un tramo
     lastPoint.current = null
     setElapsedMs(banked.current)
     setStatus('paused')

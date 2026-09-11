@@ -5,7 +5,7 @@ import { smoothHeadingDegrees } from './geo.ts'
 /**
  * Cada cuánto avanza el filtro, en milisegundos.
  *
- * WHY Android calla en cuanto el rumbo deja de cambiar. Si el filtro avanzara
+ * Android calla en cuanto el rumbo deja de cambiar. Si el filtro avanzara
  * solo con cada lectura, el cono se quedaría clavado antes de llegar.
  */
 const TICK_MS = 50
@@ -13,7 +13,7 @@ const TICK_MS = 50
 /**
  * Lecturas a dejar pasar antes de creerle al nivel de calibración.
  *
- * WHY Android arranca ese nivel en 0 —«sin calibrar»— y solo lo corrige cuando
+ * Android arranca ese nivel en 0 —«sin calibrar»— y solo lo corrige cuando
  * el sensor avisa. Sin la espera, la app pide calibrar cada vez que abre.
  */
 const CALIBRATION_GRACE_READINGS = 12
@@ -24,8 +24,8 @@ const MIN_TRUSTED_ACCURACY = 2
 /**
  * Cuánto se espera la primera lectura antes de dar la brújula por ausente.
  *
- * ! Sin magnetómetro no hay error: el sensor no emite nunca. Y Android calla
- * ! mientras el rumbo no cambie unos 2°, así que un plazo corto da falsos.
+ * Sin magnetómetro no hay error: el sensor no emite nunca. Y Android calla
+ * mientras el rumbo no cambie unos 2°, así que un plazo corto da falsos.
  */
 const SENSOR_TIMEOUT_MS = 6_000
 
@@ -72,8 +72,8 @@ export function useHeading(enabled: boolean): Heading {
         setHasCompass(true)
         readings.current += 1
 
-        // ! trueHeading vale -1 hasta que haya un fix con el que calcular la
-        // ! declinación. En Lima son un par de grados: el magnético alcanza.
+        // trueHeading vale -1 hasta que haya un fix con el que calcular la
+        // declinación. En Lima son un par de grados: el magnético alcanza.
         target.current = reading.trueHeading >= 0 ? reading.trueHeading : reading.magHeading
 
         setNeedsCalibration(

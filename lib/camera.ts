@@ -53,8 +53,8 @@ export function useFollowCamera({
   const applied = useRef<{ point: Point; bearing: number } | null>(null)
 
   const changeMode = useCallback((next: CameraMode) => {
-    // WHY Olvidar lo aplicado obliga a recolocar la cámara al volver a seguir,
-    //     aunque el ciclista no se haya movido mientras tanto
+    // Olvidar lo aplicado obliga a recolocar la cámara al volver a seguir,
+    // aunque el ciclista no se haya movido mientras tanto
     applied.current = null
     setMode(next)
   }, [])
@@ -66,8 +66,8 @@ export function useFollowCamera({
 
   const releaseOnGesture = useCallback(
     (event: ViewStateChangeEvent) => {
-      // ! En Android userInteraction también es true en nuestras animaciones:
-      // ! lo que las separa es animated (CameraChangeTracker.kt)
+      // En Android userInteraction también es true en nuestras animaciones:
+      // lo que las separa es animated (CameraChangeTracker.kt)
       if (!event.userInteraction || event.animated) return
 
       changeMode('free')

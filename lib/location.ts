@@ -40,8 +40,8 @@ export function useCurrentLocation(): CurrentLocation {
     const onUpdate = ({ coords }: MapLibrePosition) => {
       setPoint({ lat: coords.latitude, lng: coords.longitude })
       setAccuracyM(coords.accuracy)
-      // ! Android manda 0 cuando no sabe la velocidad, no null: parado y
-      // ! «sin dato» llegan iguales, y no hay forma de distinguirlos.
+      // Android manda 0 cuando no sabe la velocidad, no null: parado y
+      // «sin dato» llegan iguales, y no hay forma de distinguirlos.
       setSpeedKmh(coords.speed === null ? null : coords.speed * MS_TO_KMH)
     }
 

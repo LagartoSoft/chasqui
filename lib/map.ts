@@ -32,7 +32,7 @@ export const RIDER_COLOR = '#1E4FD8'
 /**
  * Los mismos tonos, aclarados para la leyenda.
  *
- * WHY Los de arriba están calculados contra el mapa claro. Sobre el panel
+ * Los de arriba están calculados contra el mapa claro. Sobre el panel
  * casi negro se hunden: 3,9:1 de contraste en un trazo de dos píxeles.
  */
 export const TRACK_ON_DARK = '#2FB894'

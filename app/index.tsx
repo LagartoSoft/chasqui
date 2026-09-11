@@ -56,7 +56,8 @@ function noticeFor({ isLocationDenied, hasCompass, needsCalibration }: NoticeSta
 }
 
 export default function MapScreen() {
-  // El teléfono va en el portacelular: la pantalla no se puede apagar sola
+  // El teléfono va en el portacelular: si la pantalla se apaga sola, el
+  // ciclista se queda sin mapa a mitad de una avenida
   useKeepAwake()
 
   const [isLegendOpen, setIsLegendOpen] = useState(false)

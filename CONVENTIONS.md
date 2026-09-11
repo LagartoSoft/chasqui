@@ -55,17 +55,12 @@ Orden de preferencia: **tipos > nombres > extraer una función > comentario inli
 
 ### Comentarios
 
-Solo para lo que el código **no puede** decir. Todo comentario inline empieza con un tag:
-
-| Tag | Cuándo |
-|---|---|
-| `WHY` | Una decisión que sorprendería a quien lea |
-| `!` | Un peligro que te va a morder |
-| `PERF` | Una optimización, **con números** — sin números es una opinión |
-| `TODO` | Un pendiente concreto |
+Solo para lo que el código **no puede** decir: una decisión que sorprendería, una trampa de
+Android, el porqué de un número puesto a ojo.
 
 - **Inline: máximo 2 líneas. Docblock: máximo 3.** Si necesitás cinco, el problema es el código.
 - **Nunca parafrasees la línea de abajo.** Si el comentario dice lo mismo que el código, sobra.
+- En español, y sin prefijos ni etiquetas: la frase se explica sola.
 
 ```ts
 // ❌ parafrasea
@@ -73,8 +68,8 @@ Solo para lo que el código **no puede** decir. Todo comentario inline empieza c
 setDistanceM((total) => total + step)
 
 // ✅ dice lo que el código no puede
-// ! En Android userInteraction también es true en nuestras animaciones:
-// ! lo que las separa es animated (CameraChangeTracker.kt)
+// En Android userInteraction también es true en nuestras animaciones:
+// lo que las separa es animated (CameraChangeTracker.kt)
 ```
 
 ### Dónde sí conviene comentar
@@ -86,8 +81,9 @@ setDistanceM((total) => total + step)
 
 ### Dónde no
 
-- **`app/` y `components/`.** Si una pantalla necesita explicación, lo que necesita es otro
-  nombre.
+- **`app/` y `components/`** no llevan prosa explicativa: si una pantalla necesita que le
+  cuenten qué hace, lo que necesita es otro nombre. La excepción es una trampa de la
+  plataforma, que se anota donde está aunque eso caiga en una pantalla.
 
 ## Antes de subir
 

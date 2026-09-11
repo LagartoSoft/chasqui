@@ -16,7 +16,6 @@ const ENTRIES: Entry[] = [
   { id: 'shared', color: SHARED_ON_DARK, dash: SHARED_DASH, label: 'Compartida con autos' },
 ]
 
-/** Repite el patrón de guiones hasta llenar la muestra. */
 function segmentsFor({ id, dash }: Entry) {
   if (!dash) return [{ key: `${id}-solid`, flex: 1, ink: true }]
 
