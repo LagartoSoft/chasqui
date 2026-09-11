@@ -2,31 +2,16 @@ import * as Location from 'expo-location'
 import { useEffect, useRef, useState } from 'react'
 import { smoothHeadingDegrees } from './geo.ts'
 
-/**
- * Cada cuánto avanza el filtro, en milisegundos.
- *
- * Android calla en cuanto el rumbo deja de cambiar. Si el filtro avanzara
- * solo con cada lectura, el cono se quedaría clavado antes de llegar.
- */
+/** Cada cuánto avanza el filtro: Android calla en cuanto el rumbo deja de cambiar. */
 const TICK_MS = 50
 
-/**
- * Lecturas a dejar pasar antes de creerle al nivel de calibración.
- *
- * Android arranca ese nivel en 0 —«sin calibrar»— y solo lo corrige cuando
- * el sensor avisa. Sin la espera, la app pide calibrar cada vez que abre.
- */
+/** Lecturas de gracia: Android arranca el nivel en «sin calibrar» y tarda en corregirlo. */
 const CALIBRATION_GRACE_READINGS = 12
 
 /** Nivel de calibración de Android, de 0 a 3, por debajo del cual el rumbo no es fiable. */
 const MIN_TRUSTED_ACCURACY = 2
 
-/**
- * Cuánto se espera la primera lectura antes de dar la brújula por ausente.
- *
- * Sin magnetómetro no hay error: el sensor no emite nunca. Y Android calla
- * mientras el rumbo no cambie unos 2°, así que un plazo corto da falsos.
- */
+/** Espera antes de dar la brújula por ausente: sin magnetómetro no hay error, hay silencio. */
 const SENSOR_TIMEOUT_MS = 6_000
 
 export type Heading = {
@@ -36,12 +21,7 @@ export type Heading = {
   needsCalibration: boolean
 }
 
-/**
- * Sigue hacia dónde apunta el teléfono, suavizado para que el cono no tiemble.
- *
- * Única cosa que sigue saliendo de `expo-location`: el rumbo lo da
- * `SensorManager` y no pasa por Google, así que funciona sin Play Services.
- */
+/** Sigue hacia dónde apunta el teléfono; el rumbo sale de SensorManager y no pasa por Google. */
 export function useHeading(enabled: boolean): Heading {
   const [degrees, setDegrees] = useState<number | null>(null)
   const [hasCompass, setHasCompass] = useState(true)
@@ -72,8 +52,7 @@ export function useHeading(enabled: boolean): Heading {
         setHasCompass(true)
         readings.current += 1
 
-        // trueHeading vale -1 hasta que haya un fix con el que calcular la
-        // declinación. En Lima son un par de grados: el magnético alcanza.
+        // trueHeading vale -1 sin fix; en Lima la declinación es de un par de grados
         target.current = reading.trueHeading >= 0 ? reading.trueHeading : reading.magHeading
 
         setNeedsCalibration(

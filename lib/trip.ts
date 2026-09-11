@@ -1,27 +1,13 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { distanceMeters, type Point } from './geo.ts'
 
-/**
- * Precisión peor que esto y la posición se descarta, en metros.
- *
- * El primer fix que entrega Android suele ser la última posición conocida
- * —tu casa, esta mañana— y sumaría kilómetros que nadie pedaleó.
- */
+/** Peor precisión que esta se descarta: el primer fix suele ser el de tu casa. */
 const MAX_ACCURACY_M = 20
 
-/**
- * Tramo mínimo que cuenta como avance, en metros.
- *
- * Parado en un semáforo el GPS baila tres o cuatro metros. Sin este piso,
- * diez minutos de espera regalan cien metros.
- */
+/** Tramo mínimo que cuenta, en metros: parado el GPS baila y regalaría distancia. */
 const MIN_STEP_M = 5
 
-/**
- * Tramo máximo creíble entre dos posiciones, en metros.
- *
- * Un fix malo bajo un puente teletransporta cientos de metros de golpe.
- */
+/** Tramo máximo creíble, en metros: un fix malo teletransporta cientos de golpe. */
 const MAX_STEP_M = 200
 
 /** Cada cuánto se refresca el reloj en pantalla, en milisegundos. */
@@ -51,12 +37,7 @@ type TripInput = {
   accuracyM: number | null
 }
 
-/**
- * Mide un recorrido mientras la app esté delante.
- *
- * No sobrevive a que se bloquee la pantalla: la ubicación de MapLibre
- * es solo de primer plano. Nada se guarda al terminar.
- */
+/** Mide un recorrido solo con la app delante, y no guarda nada al terminar. */
 export function useTrip({ point, accuracyM }: TripInput): Trip {
   const [status, setStatus] = useState<TripStatus>('idle')
   const [distanceM, setDistanceM] = useState(0)
@@ -85,8 +66,7 @@ export function useTrip({ point, accuracyM }: TripInput): Trip {
     const previous = lastPoint.current
     lastPoint.current = point
 
-    // La primera posición buena solo fija el origen: medir contra la
-    // anterior sumaría el trecho que se recorrió antes de empezar
+    // La primera posición buena solo fija el origen: medir contra la anterior sumaría de más
     if (!previous) return
 
     const step = distanceMeters(previous, point)

@@ -22,12 +22,7 @@ export type CurrentLocation = {
   speedKmh: number | null
 }
 
-/**
- * Sigue la posición del ciclista con el motor de ubicación de MapLibre.
- *
- * No usa `expo-location`: ese le habla solo al proveedor fusionado de
- * Google y calla en un teléfono sin Play Services. Este usa el del sistema.
- */
+/** Sigue al ciclista con el motor de MapLibre, que usa el proveedor del sistema y no Google. */
 export function useCurrentLocation(): CurrentLocation {
   const [permission, setPermission] = useState<LocationPermission>('pending')
   const [point, setPoint] = useState<Point | null>(null)
@@ -40,8 +35,7 @@ export function useCurrentLocation(): CurrentLocation {
     const onUpdate = ({ coords }: MapLibrePosition) => {
       setPoint({ lat: coords.latitude, lng: coords.longitude })
       setAccuracyM(coords.accuracy)
-      // Android manda 0 cuando no sabe la velocidad, no null: parado y
-      // «sin dato» llegan iguales, y no hay forma de distinguirlos.
+      // Android manda 0 cuando no sabe la velocidad: parado y «sin dato» llegan iguales
       setSpeedKmh(coords.speed === null ? null : coords.speed * MS_TO_KMH)
     }
 

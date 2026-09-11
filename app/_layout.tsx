@@ -6,8 +6,7 @@ import { View } from 'react-native'
 import { SURFACE_SOLID } from '../lib/theme.ts'
 
 export default function RootLayout() {
-  // Los cuatro pesos viven en assets/fonts: el paquete de Google metía
-  // dieciocho en el APK para los cuatro que se usan
+  // Los cuatro pesos van en assets/fonts: el paquete de Google metía dieciocho en el APK
   const [ready] = useFonts({
     Geist_300Light: require('../assets/fonts/Geist_300Light.ttf'),
     Geist_400Regular: require('../assets/fonts/Geist_400Regular.ttf'),

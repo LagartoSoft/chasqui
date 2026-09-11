@@ -13,12 +13,7 @@ const METERS_PER_PIXEL_AT_ZOOM_0 = 153_054
 
 type CircleRadius = NonNullable<NonNullable<CircleLayerSpecification['paint']>['circle-radius']>
 
-/**
- * Traduce la incertidumbre del GPS al radio en píxeles que pide MapLibre.
- *
- * Cada zoom parte en dos el metro por píxel, que es exactamente lo que
- * interpola `exponential` en base 2 entre los extremos de la escala.
- */
+/** Pasa la precisión del GPS a píxeles: cada zoom parte en dos el metro por píxel. */
 function accuracyRadius(accuracyM: number): CircleRadius {
   return [
     'interpolate',
@@ -77,8 +72,7 @@ export function RiderPuck({ point, headingDegrees, accuracyM }: RiderPuckProps) 
               'icon-allow-overlap': true,
               'icon-ignore-placement': true,
               'icon-pitch-alignment': 'map',
-              // Alineado al mapa, no a la pantalla: el cono tiene que girar
-              // también cuando gire el mapa en el modo que lo sigue.
+              // Alineado al mapa: el cono también tiene que girar cuando gire el mapa
               'icon-rotation-alignment': 'map',
               'icon-rotate': headingDegrees,
             }}

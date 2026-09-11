@@ -13,12 +13,7 @@ export const IS_TRACK: FilterSpecification = ['==', ['get', 'kind'], 'track']
 export const IS_LANE: FilterSpecification = ['==', ['get', 'kind'], 'lane']
 export const IS_SHARED: FilterSpecification = ['==', ['get', 'kind'], 'shared']
 
-/**
- * La red usa dos tonos, no tres: el tipo de separación lo dice el guionado.
- *
- * Van rebajados y profundos a propósito. La interfaz es monocroma,
- * así que estos son el único color del producto y no pueden gritar.
- */
+/** Dos tonos y el guionado, rebajados: son el único color de una interfaz monocroma. */
 export const TRACK_COLOR = '#0A7C63'
 /** El mismo tono punteado: es infraestructura, pero solo pintura. */
 export const LANE_COLOR = '#0A7C63'
@@ -29,12 +24,7 @@ export const CASING_COLOR = '#FFFFFF'
 /** Azul profundo. El punto azul es una convención que no vale la pena romper. */
 export const RIDER_COLOR = '#1E4FD8'
 
-/**
- * Los mismos tonos, aclarados para la leyenda.
- *
- * Los de arriba están calculados contra el mapa claro. Sobre el panel
- * casi negro se hunden: 3,9:1 de contraste en un trazo de dos píxeles.
- */
+/** Los mismos tonos aclarados: sobre el panel negro los del mapa caen a 3,9:1. */
 export const TRACK_ON_DARK = '#2FB894'
 export const SHARED_ON_DARK = '#E09A4A'
 

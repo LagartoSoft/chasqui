@@ -1,9 +1,4 @@
-/**
- * Los valores de diseño, tomados de lagartosoft.org.
- *
- * Monocromo y con esquinas casi rectas: el único color en pantalla
- * son los datos del mapa. MapLibre necesita literales, así que viven acá.
- */
+/** Diseño tomado de lagartosoft.org: monocromo, esquinas rectas, el color solo en el mapa. */
 
 /** Paneles sobre el mapa. Oscuros siempre: el mapa base es claro. */
 export const SURFACE = 'rgba(20, 20, 20, 0.94)'

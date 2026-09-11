@@ -58,7 +58,8 @@ Orden de preferencia: **tipos > nombres > extraer una función > comentario inli
 Solo para lo que el código **no puede** decir: una decisión que sorprendería, una trampa de
 Android, el porqué de un número puesto a ojo.
 
-- **Inline: máximo 2 líneas. Docblock: máximo 3.** Si necesitás cinco, el problema es el código.
+- **Una sola línea, siempre.** Si no entra en una línea, el problema es el código y no el
+  comentario: ponele otro nombre a la función o partila.
 - **Nunca parafrasees la línea de abajo.** Si el comentario dice lo mismo que el código, sobra.
 - En español, y sin prefijos ni etiquetas: la frase se explica sola.
 
