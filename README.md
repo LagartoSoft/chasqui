@@ -58,6 +58,11 @@ Antes de subir nada:
 bun run check           # biome + tsc
 ```
 
+Si `prebuild` se queja de que `@maplibre/maplibre-react-native` **no contiene un config plugin
+válido** y habla de un `Unexpected token 'typeof'`, es que no están las dependencias: sin
+`lib/commonjs` compilado, Expo cae al `.ts` del código fuente y Node no sabe leerlo. Corré
+`bun install` y volvé a intentar.
+
 ## De dónde salen los datos
 
 `assets/cycleways.json` es una foto de la red ciclista de OpenStreetMap, sacada del extracto de

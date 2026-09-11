@@ -10,7 +10,7 @@
     "android": {
       "package": "org.lagartosoft.chasqui"
     },
-    "plugins": ["expo-router", "@maplibre/maplibre-react-native"],
+    "plugins": ["expo-router", "@maplibre/maplibre-react-native", "expo-font"],
     "experiments": {
       "typedRoutes": true
     }

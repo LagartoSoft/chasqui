@@ -7,6 +7,8 @@
 
 /** Paneles sobre el mapa. Oscuros siempre: el mapa base es claro. */
 export const SURFACE = 'rgba(20, 20, 20, 0.94)'
+/** El mismo negro sin transparencia, para cuando no hay mapa detrás. */
+export const SURFACE_SOLID = '#141414'
 export const SURFACE_RAISED = 'rgba(28, 28, 28, 0.96)'
 
 /** Un píxel de borde, nunca una sombra. */
