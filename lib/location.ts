@@ -5,8 +5,11 @@ import {
 import { useEffect, useRef, useState } from 'react'
 import { distanceMeters, type Point } from './geo.ts'
 
-/** Metros a recorrer para que llegue una posición nueva. */
-const MIN_DISPLACEMENT_M = 5
+/** Sin filtro de distancia: con uno, parado no llega ninguna lectura y tardás en aparecer. */
+const MIN_DISPLACEMENT_M = 0
+
+/** Movimiento por debajo del cual no vale la pena mover el punto, en metros. */
+const STILL_M = 3
 
 /** Pasado esto la lectura que tenemos ya no vale ni de referencia, en milisegundos. */
 const STALE_MS = 120_000
@@ -57,6 +60,7 @@ export function useCurrentLocation(): CurrentLocation {
   const [courseDegrees, setCourseDegrees] = useState<number | null>(null)
 
   const last = useRef<Fix | null>(null)
+  const shown = useRef<Point | null>(null)
 
   useEffect(() => {
     let cancelled = false
@@ -70,21 +74,23 @@ export function useCurrentLocation(): CurrentLocation {
       const previous = last.current
       if (!isBetter(next, previous)) return
 
-      last.current = next
-      setPoint(next.point)
-      setAccuracyM(next.accuracyM)
-      setCourseDegrees(coords.heading)
-
       // Android manda 0 cuando el proveedor no sabe la velocidad, así que la calculamos
       const reported = coords.speed === null ? 0 : coords.speed * MS_TO_KMH
-      if (reported > 0) {
-        setSpeedKmh(reported)
-        return
-      }
-
       const seconds = previous ? (next.at - previous.at) / 1000 : 0
       const meters = previous ? distanceMeters(previous.point, next.point) : 0
-      setSpeedKmh(seconds > 0 ? (meters / seconds) * MS_TO_KMH : null)
+
+      last.current = next
+      setAccuracyM(next.accuracyM)
+      setCourseDegrees(coords.heading)
+      if (reported > 0) setSpeedKmh(reported)
+      else if (seconds > 0) setSpeedKmh((meters / seconds) * MS_TO_KMH)
+
+      // Parado el GPS baila un par de metros; mover la cámara por eso marea
+      const drift = shown.current ? distanceMeters(shown.current, next.point) : Number.MAX_VALUE
+      if (drift < STILL_M) return
+
+      shown.current = next.point
+      setPoint(next.point)
     }
 
     async function watch() {
@@ -97,10 +103,6 @@ export function useCurrentLocation(): CurrentLocation {
       LocationManager.setMinDisplacement(MIN_DISPLACEMENT_M)
       LocationManager.addListener(onUpdate)
       LocationManager.start()
-
-      // Con el filtro de cinco metros nada llega hasta que te movés: esto ubica ya
-      const known = await LocationManager.getCurrentPosition()
-      if (!cancelled && known) onUpdate(known)
     }
 
     watch()
