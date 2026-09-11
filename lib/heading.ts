@@ -1,6 +1,7 @@
 import * as Location from 'expo-location'
 import { useEffect, useRef, useState } from 'react'
 import { smoothHeadingDegrees } from './geo.ts'
+import { COURSE_MIN_KMH } from './location.ts'
 
 /** Cada cuánto avanza el filtro: Android calla en cuanto el rumbo deja de cambiar. */
 const TICK_MS = 50
@@ -14,6 +15,13 @@ const MIN_TRUSTED_ACCURACY = 2
 /** Espera antes de dar la brújula por ausente: sin magnetómetro no hay error, hay silencio. */
 const SENSOR_TIMEOUT_MS = 6_000
 
+type HeadingInput = {
+  enabled: boolean
+  /** Hacia dónde te movés según el GPS, cuando va lo bastante rápido para creerle. */
+  courseDegrees: number | null
+  speedKmh: number | null
+}
+
 export type Heading = {
   /** Grados horarios desde el norte, ya suavizados. `null` hasta la primera lectura. */
   degrees: number | null
@@ -21,15 +29,19 @@ export type Heading = {
   needsCalibration: boolean
 }
 
-/** Sigue hacia dónde apunta el teléfono; el rumbo sale de SensorManager y no pasa por Google. */
-export function useHeading(enabled: boolean): Heading {
+/** Pedaleando usa el rumbo del GPS; parado, la brújula. El teléfono va fijo al manubrio. */
+export function useHeading({ enabled, courseDegrees, speedKmh }: HeadingInput): Heading {
   const [degrees, setDegrees] = useState<number | null>(null)
   const [hasCompass, setHasCompass] = useState(true)
   const [needsCalibration, setNeedsCalibration] = useState(false)
 
-  const target = useRef<number | null>(null)
+  const compass = useRef<number | null>(null)
   const smoothed = useRef<number | null>(null)
   const readings = useRef(0)
+
+  const moving = speedKmh !== null && speedKmh >= COURSE_MIN_KMH
+  const course = useRef<number | null>(null)
+  course.current = moving ? courseDegrees : null
 
   useEffect(() => {
     if (!enabled) return
@@ -40,9 +52,11 @@ export function useHeading(enabled: boolean): Heading {
     const timeout = setTimeout(() => setHasCompass(false), SENSOR_TIMEOUT_MS)
 
     const tick = setInterval(() => {
-      if (target.current === null) return
+      // El rumbo del movimiento manda sobre el magnetómetro, que se descalibra
+      const target = course.current ?? compass.current
+      if (target === null) return
 
-      smoothed.current = smoothHeadingDegrees(smoothed.current, target.current)
+      smoothed.current = smoothHeadingDegrees(smoothed.current, target)
       setDegrees(Math.round(smoothed.current) % 360)
     }, TICK_MS)
 
@@ -53,7 +67,7 @@ export function useHeading(enabled: boolean): Heading {
         readings.current += 1
 
         // trueHeading vale -1 sin fix; en Lima la declinación es de un par de grados
-        target.current = reading.trueHeading >= 0 ? reading.trueHeading : reading.magHeading
+        compass.current = reading.trueHeading >= 0 ? reading.trueHeading : reading.magHeading
 
         setNeedsCalibration(
           readings.current >= CALIBRATION_GRACE_READINGS && reading.accuracy < MIN_TRUSTED_ACCURACY,
@@ -73,5 +87,5 @@ export function useHeading(enabled: boolean): Heading {
     }
   }, [enabled])
 
-  return { degrees, hasCompass, needsCalibration }
+  return { degrees, hasCompass, needsCalibration: needsCalibration && !moving }
 }

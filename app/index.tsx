@@ -59,7 +59,7 @@ type NoticeState = {
 
 function noticeFor({ isLocationDenied, hasCompass, needsCalibration }: NoticeState) {
   if (isLocationDenied) return 'Sin permiso de ubicación no se puede mostrar dónde estás.'
-  if (!hasCompass) return 'Este teléfono no tiene brújula: no puede mostrar hacia dónde mirás.'
+  if (!hasCompass) return 'Este teléfono no tiene brújula: el rumbo solo aparece si te movés.'
   if (needsCalibration) return 'Brújula perdida. Mové el teléfono dibujando un ocho en el aire.'
   return null
 }
@@ -72,8 +72,12 @@ export default function MapScreen() {
   const [dockHeight, setDockHeight] = useState(0)
   const insets = useSafeAreaInsets()
 
-  const { permission, point, accuracyM, speedKmh } = useCurrentLocation()
-  const { degrees, hasCompass, needsCalibration } = useHeading(permission === 'granted')
+  const { permission, point, accuracyM, speedKmh, courseDegrees } = useCurrentLocation()
+  const { degrees, hasCompass, needsCalibration } = useHeading({
+    enabled: permission === 'granted',
+    courseDegrees,
+    speedKmh,
+  })
   const smoothedSpeed = useSmoothedSpeed(speedKmh)
   const trip = useTrip({ point, accuracyM })
 
