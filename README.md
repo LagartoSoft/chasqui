@@ -90,6 +90,11 @@ La fuente es `assets/icon.svg` y los PNG se regeneran desde ahí; el comando est
 Todo el trazo entra en el 61% central: Android recorta con una máscara circular y lo de fuera
 desaparece.
 
+## Contribuir
+
+[`AGENTS.md`](AGENTS.md) orienta a quien va a modificar la app, sea persona o agente. Las reglas
+están en [`docs/conventions/`](docs/conventions/), una por tema.
+
 ## Pendiente
 
 - Elegir licencia.

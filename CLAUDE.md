@@ -1,1 +1,1 @@
-CONVENTIONS.md
+AGENTS.md
