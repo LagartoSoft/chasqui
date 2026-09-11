@@ -6,11 +6,27 @@
     "version": "0.1.0",
     "orientation": "portrait",
     "userInterfaceStyle": "automatic",
-    "newArchEnabled": true,
+    "icon": "./assets/icon.png",
     "android": {
-      "package": "org.lagartosoft.chasqui"
+      "package": "org.lagartosoft.chasqui",
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/adaptive-icon.png",
+        "backgroundColor": "#141414"
+      }
     },
-    "plugins": ["expo-router", "@maplibre/maplibre-react-native", "expo-font"],
+    "plugins": [
+      "expo-router",
+      "@maplibre/maplibre-react-native",
+      "expo-font",
+      [
+        "expo-splash-screen",
+        {
+          "backgroundColor": "#141414",
+          "image": "./assets/adaptive-icon.png",
+          "imageWidth": 160
+        }
+      ]
+    ],
     "experiments": {
       "typedRoutes": true
     }
