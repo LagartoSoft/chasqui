@@ -1,0 +1,21 @@
+<!--
+  Greca escalonada: el motivo andino de Chan Chan, que además se lee como un
+  camino subiendo terrazas. Tres peldaños de paso y contrapaso iguales.
+
+  Los PNG se regeneran con:
+    rsvg-convert -w 1024 -h 1024 -b '#141414' icon.svg -o icon.png
+    rsvg-convert -w 1024 -h 1024               icon.svg -o adaptive-icon.png
+
+  ! Todo el trazo entra en el 61% central del lienzo. Android recorta el icono
+  ! con una máscara circular y ahí fuera no sobrevive nada.
+-->
+<svg xmlns="http://www.w3.org/2000/svg" width="1024" height="1024" viewBox="0 0 1024 1024">
+  <path
+    d="M 299 636 H 441 V 512 H 583 V 388 H 725"
+    fill="none"
+    stroke="#2FB894"
+    stroke-width="80"
+    stroke-linecap="butt"
+    stroke-linejoin="miter"
+  />
+</svg>
