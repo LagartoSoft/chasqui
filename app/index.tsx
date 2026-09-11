@@ -15,7 +15,7 @@ import {
   Text,
   View,
 } from 'react-native'
-import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context'
+import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import cycleways from '../assets/cycleways.json'
 import { Legend } from '../components/legend.tsx'
 import { MapControls } from '../components/map-controls.tsx'
@@ -104,6 +104,7 @@ export default function MapScreen() {
         mapStyle={MAP_STYLE_URL}
         attribution
         logo={false}
+        compass={false}
         onRegionWillChange={onRegionWillChange}
       >
         <Camera ref={cameraRef} initialViewState={{ center: LIMA_CENTER, zoom: INITIAL_ZOOM }} />
@@ -157,9 +158,12 @@ export default function MapScreen() {
         {point ? <RiderPuck point={point} headingDegrees={degrees} accuracyM={accuracyM} /> : null}
       </MapView>
 
-      <SafeAreaView className="absolute inset-x-0 top-0" pointerEvents="none">
+      <View
+        pointerEvents="none"
+        style={{ position: 'absolute', top: insets.top + EDGE, left: EDGE, right: EDGE }}
+      >
         <View
-          className="m-4 self-start"
+          className="self-start"
           style={{
             backgroundColor: SURFACE,
             borderRadius: RADIUS,
@@ -180,57 +184,64 @@ export default function MapScreen() {
             CHASQUI
           </Text>
         </View>
-      </SafeAreaView>
+      </View>
 
-      <SafeAreaView className="absolute inset-x-0 bottom-0" pointerEvents="box-none">
-        <View className="m-4 gap-3" pointerEvents="box-none">
-          <View className="flex-row items-end justify-between gap-3" pointerEvents="box-none">
-            {isLegendOpen ? (
-              <View className="flex-1" style={{ maxWidth: 300 }}>
-                <Legend />
-              </View>
-            ) : (
-              <View />
-            )}
+      <View
+        pointerEvents="box-none"
+        style={{
+          position: 'absolute',
+          bottom: insets.bottom + EDGE,
+          left: EDGE,
+          right: EDGE,
+          gap: 12,
+        }}
+      >
+        <View className="flex-row items-end justify-between gap-3" pointerEvents="box-none">
+          {isLegendOpen ? (
+            <View className="flex-1" style={{ maxWidth: 300 }}>
+              <Legend />
+            </View>
+          ) : (
+            <View />
+          )}
 
-            <MapControls
-              mode={mode}
-              onToggleMode={toggleMode}
-              isLegendOpen={isLegendOpen}
-              onToggleLegend={() => setIsLegendOpen((open) => !open)}
-            />
-          </View>
+          <MapControls
+            mode={mode}
+            onToggleMode={toggleMode}
+            isLegendOpen={isLegendOpen}
+            onToggleLegend={() => setIsLegendOpen((open) => !open)}
+          />
+        </View>
 
-          <View className="gap-3" onLayout={onDockLayout} pointerEvents="box-none">
-            {notice ? (
-              <View
-                pointerEvents="none"
+        <View className="gap-3" onLayout={onDockLayout} pointerEvents="box-none">
+          {notice ? (
+            <View
+              pointerEvents="none"
+              style={{
+                backgroundColor: SURFACE,
+                borderRadius: RADIUS,
+                borderWidth: 1,
+                borderColor: BORDER,
+                paddingHorizontal: 14,
+                paddingVertical: 11,
+              }}
+            >
+              <Text
                 style={{
-                  backgroundColor: SURFACE,
-                  borderRadius: RADIUS,
-                  borderWidth: 1,
-                  borderColor: BORDER,
-                  paddingHorizontal: 14,
-                  paddingVertical: 11,
+                  fontFamily: FONT.regular,
+                  fontSize: 12.5,
+                  lineHeight: 17,
+                  color: INK_SECONDARY,
                 }}
               >
-                <Text
-                  style={{
-                    fontFamily: FONT.regular,
-                    fontSize: 12.5,
-                    lineHeight: 17,
-                    color: INK_SECONDARY,
-                  }}
-                >
-                  {notice}
-                </Text>
-              </View>
-            ) : null}
+                {notice}
+              </Text>
+            </View>
+          ) : null}
 
-            <TripDock speedKmh={smoothedSpeed} trip={trip} />
-          </View>
+          <TripDock speedKmh={smoothedSpeed} trip={trip} />
         </View>
-      </SafeAreaView>
+      </View>
 
       {trip.status === 'finished' ? (
         <View style={StyleSheet.absoluteFill}>
