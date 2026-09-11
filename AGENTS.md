@@ -43,6 +43,15 @@ scripts/      apk.sh
 | `lib/location.ts` | `COURSE_MIN_KMH` `6`        | Desde qué velocidad se corrige la brújula         |
 | `lib/heading.ts`  | `OFFSET_SMOOTHING` `0.05`   | Cuánto tarda la brújula en aprender su desviación |
 
+## Cómo se cambia algo
+
+- **Arreglá lo que se reportó y nada más.** Si el arreglo obliga a tocar otra cosa que funciona,
+  decilo en vez de meterlo callado.
+- **Probá en los dos teléfonos**, porque no se comportan igual: uno **sin servicios de Google**
+  tiene el GPS fino y la brújula que se descalibra; uno **moderno con Google** recibe muchas
+  lecturas de wifi, imprecisas y sin velocidad. Un arreglo que anda en uno puede romper el otro.
+- **`bun run check` tiene que pasar** antes de dar algo por terminado.
+
 ## Las convenciones
 
 |                                            |                                             |
