@@ -1,15 +1,6 @@
 import Feather from '@expo/vector-icons/Feather'
 import { Pressable, Text, View } from 'react-native'
-import {
-  BRAND,
-  FONT,
-  INK,
-  INK_MUTED,
-  ON_SOLID,
-  RADIUS,
-  RADIUS_TIGHT,
-  SURFACE,
-} from '../lib/theme.ts'
+import { BRAND, FONT, INK, ON_SOLID, RADIUS, RADIUS_TIGHT, SURFACE } from '../lib/theme.ts'
 import { formatDuration, formatKm, type Trip } from '../lib/trip.ts'
 import { EMPTY, Field } from './field.tsx'
 
@@ -98,6 +89,7 @@ export function TripDock({ speedKmh, trip }: TripDockProps) {
               label="Tiempo"
               value={formatDuration(trip.elapsedMs)}
               unit={trip.elapsedMs >= AN_HOUR_MS ? 'H' : 'MIN'}
+              status={trip.status === 'recording' ? 'live' : 'paused'}
             />
             <Field label="Distancia" value={formatKm(trip.distanceM)} unit="KM" />
           </View>
@@ -125,14 +117,6 @@ export function TripDock({ speedKmh, trip }: TripDockProps) {
           </>
         ) : null}
       </View>
-
-      {trip.status === 'paused' ? (
-        <View className="px-4 pb-3">
-          <Text style={{ fontFamily: FONT.regular, fontSize: 12, color: INK_MUTED }}>
-            En pausa. El reloj está detenido.
-          </Text>
-        </View>
-      ) : null}
     </View>
   )
 }
