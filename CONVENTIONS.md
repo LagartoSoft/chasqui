@@ -53,12 +53,50 @@ setDistanceM((total) => total + step)
 const MAX_ACCURACY_M = 20
 ```
 
-**Dónde sí**: `lib/location.ts`, `lib/heading.ts` y `lib/trip.ts`, donde viven las manías del GPS
-y del magnetómetro; `lib/camera.ts` y `lib/map.ts`, donde viven las de MapLibre; y cualquier
-constante exportada, con su unidad.
+**Dónde sí**: en `lib/`, donde viven las manías del GPS, del magnetómetro y de MapLibre; y en
+cualquier constante exportada, con su unidad.
 
 **Dónde no**: `app/` y `components/`. Si una pantalla necesita que le cuenten qué hace, lo que
 necesita es otro nombre. La excepción es una trampa de la plataforma, que se anota donde está.
+
+## Dónde vive cada cosa
+
+```
+app/          las dos pantallas. Solo componen: no calculan nada
+components/   lo que se ve. Un archivo por pieza
+lib/          los hooks y los datos. Acá pasa todo lo que piensa
+assets/       la red ciclista, la fuente y el icono
+scripts/      apk.sh
+```
+
+Tres reglas que mantienen eso en pie:
+
+- **`lib/` no importa de `components/`.** Va en un solo sentido.
+- **Un hook por tema**: `location`, `heading`, `speed`, `trip`, `camera`. Si un hook empieza a
+  hacer dos cosas, son dos hooks.
+- **Ningún color suelto en un componente.** Los de la interfaz salen de `lib/theme.ts` y los del
+  mapa de `lib/map.ts`. Están como literales y no como clases de Tailwind porque MapLibre no
+  entiende clases.
+
+Antes de escribir un panel oscuro, mirá `components/panel.tsx`: ya existe.
+
+## Reglas de la plataforma
+
+Comportamientos de React Native, de Android y de MapLibre que no se deducen leyendo el código.
+Se respetan siempre:
+
+- **Posicionar con estilos explícitos**, no con clases lógicas de Tailwind. `inset-x-0` es
+  `inset-inline`, React Native no la soporta y NativeWind la descarta sin avisar. Usá `left`,
+  `right`, `top`, `bottom`.
+- **Un gesto del mapa es `userInteraction && !animated`.** En Android `userInteraction` también
+  vale `true` para las animaciones que lanza la propia app.
+- **De dos lecturas de ubicación gana la más precisa, no la más nueva.** El motor pide a `gps` y
+  a `network` a la vez, y las de `network` traen cientos de metros de error.
+- **El `0` de Android en velocidad y rumbo significa «no tengo el dato»**, no cero. Hay que
+  distinguirlo por otro camino.
+- **Los colores del mapa van como literales**, no como clases: MapLibre no entiende Tailwind.
+- **Leé el código de una función de librería antes de confiar en ella.** Si su contrato no está
+  claro, no entra.
 
 ## Diseño
 
