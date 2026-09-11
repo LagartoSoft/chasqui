@@ -54,6 +54,20 @@ bun run apk
 adb install -r android/app/build/outputs/apk/release/app-release.apk
 ```
 
+Ese script lleva un flag que conviene entender:
+
+```
+-PreactNativeArchitectures=arm64-v8a,armeabi-v7a
+```
+
+Se lee **`-P`** (así define Gradle una propiedad) más **`reactNativeArchitectures`**. Limita para
+qué procesadores se compilan las librerías nativas. Por defecto compila cuatro, y dos de ellas
+—`x86` y `x86_64`— solo las usa un emulador: son **62 MB de los 138** que pesaba el APK antes de
+poner esto. Todos los teléfonos Android del mundo son ARM.
+
+El valor por defecto vive en `android/gradle.properties`, pero `android/` se regenera en cada
+`prebuild`, así que el flag va en el comando y no en el archivo.
+
 Antes de subir nada:
 
 ```sh
