@@ -24,7 +24,8 @@ puesto a ojo, una decisión que sorprendería.
 
 - **Una sola línea, siempre.** Si no entra, el problema es el código: ponele otro nombre o partilo.
 - **Nunca parafrasees la línea de abajo.**
-- **En presente y como regla**, no como relato. Qué hace y por qué, nunca qué pasó antes.
+- **En presente y como regla**, no como relato. Qué hace y por qué, nunca qué pasó antes ni en qué
+  teléfono. Sin marcas, modelos ni años: envejecen y no cambian la regla.
 - Sin prefijos ni etiquetas: la frase se explica sola.
 
 ```ts
@@ -33,7 +34,7 @@ puesto a ojo, una decisión que sorprendería.
 setDistanceM((total) => total + step);
 
 // ✅ dice lo que el código no puede
-// Peor precisión que esta se descarta: el primer fix suele ser el de tu casa.
+// Peor precisión que esta se descarta: la primera lectura llega sin haber enganchado.
 const MAX_ACCURACY_M = 20;
 ```
 

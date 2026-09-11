@@ -47,9 +47,9 @@ scripts/      apk.sh
 
 - **Arreglá lo que se reportó y nada más.** Si el arreglo obliga a tocar otra cosa que funciona,
   decilo en vez de meterlo callado.
-- **Probá en los dos teléfonos**, porque no se comportan igual: uno **sin servicios de Google**
-  tiene el GPS fino y la brújula que se descalibra; uno **moderno con Google** recibe muchas
-  lecturas de wifi, imprecisas y sin velocidad. Un arreglo que anda en uno puede romper el otro.
+- **Un cambio de ubicación o brújula tiene que andar con servicios de Google y sin ellos.** No se
+  comportan igual: sin Google el GPS llega limpio y la brújula se descalibra; con Google entran
+  además lecturas de wifi, imprecisas y sin velocidad. Lo que arregla un caso puede romper el otro.
 - **`bun run check` tiene que pasar** antes de dar algo por terminado.
 
 ## Las convenciones

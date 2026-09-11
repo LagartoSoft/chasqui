@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { distanceMeters, type Point } from './geo.ts'
 
-/** Peor precisión que esta se descarta: el primer fix suele ser el de tu casa. */
+/** Peor precisión que esta se descarta: la primera lectura llega sin haber enganchado. */
 const MAX_ACCURACY_M = 20
 
 /** Tramo mínimo que cuenta, en metros: parado el GPS baila y regalaría distancia. */

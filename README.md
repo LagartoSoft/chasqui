@@ -7,7 +7,7 @@ Los chasquis llevaban mensajes corriendo por la red de caminos incas. Esta app h
 red de ciclovías: te dice por dónde se puede.
 
 **Anda en cualquier Android, con servicios de Google o sin ellos.** La ubicación sale del proveedor
-del sistema y no del de Google, así que un Huawei posterior a 2019 la usa igual.
+del sistema, no del de Google.
 
 <p align="center">
   <img src="docs/mockup.png" alt="La app midiendo un recorrido sobre la red ciclista de San Borja" width="320">
