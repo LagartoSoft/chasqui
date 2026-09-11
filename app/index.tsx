@@ -7,13 +7,15 @@ import {
   type ViewStateChangeEvent,
 } from '@maplibre/maplibre-react-native'
 import { useKeepAwake } from 'expo-keep-awake'
-import { useRef } from 'react'
+import { useRef, useState } from 'react'
 import { type NativeSyntheticEvent, StyleSheet, Text, View } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import cycleways from '../assets/cycleways.json'
-import { CameraModeButton } from '../components/camera-mode-button.tsx'
+import { Legend } from '../components/legend.tsx'
+import { MapControls } from '../components/map-controls.tsx'
 import { RiderPuck } from '../components/rider-puck.tsx'
-import { Speedometer } from '../components/speedometer.tsx'
+import { TripDock } from '../components/trip-dock.tsx'
+import { TripSummary } from '../components/trip-summary.tsx'
 import { useFollowCamera } from '../lib/camera.ts'
 import { useHeading } from '../lib/heading.ts'
 import { useCurrentLocation } from '../lib/location.ts'
@@ -35,6 +37,8 @@ import {
   TRACK_WIDTH,
 } from '../lib/map.ts'
 import { useSmoothedSpeed } from '../lib/speed.ts'
+import { BORDER, FONT, INK, INK_SECONDARY, RADIUS, SURFACE } from '../lib/theme.ts'
+import { useTrip } from '../lib/trip.ts'
 
 const INITIAL_ZOOM = 14
 
@@ -55,9 +59,12 @@ export default function MapScreen() {
   // El teléfono va en el portacelular: la pantalla no se puede apagar sola
   useKeepAwake()
 
+  const [isLegendOpen, setIsLegendOpen] = useState(false)
+
   const { permission, point, accuracyM, speedKmh } = useCurrentLocation()
   const { degrees, hasCompass, needsCalibration } = useHeading(permission === 'granted')
   const smoothedSpeed = useSmoothedSpeed(speedKmh)
+  const trip = useTrip({ point, accuracyM })
 
   const cameraRef = useRef<CameraRef>(null)
   const { mode, toggleMode, releaseOnGesture } = useFollowCamera({
@@ -137,59 +144,83 @@ export default function MapScreen() {
       </MapView>
 
       <SafeAreaView className="absolute inset-x-0 top-0" pointerEvents="none">
-        <View className="m-3.5 flex-row items-start justify-between">
-          <View className="gap-2.5 rounded-2xl bg-neutral-950/90 px-4 py-3">
-            <Text className="text-[15px] tracking-[5px] text-neutral-100">chasqui</Text>
-
-            <View className="gap-1.5">
-              <View className="flex-row items-center gap-2">
-                {/* Los colores salen de map.ts porque MapLibre necesita el literal */}
-                <View className="h-1 w-5 rounded-sm" style={{ backgroundColor: TRACK_COLOR }} />
-                <Text className="text-[11px] text-neutral-200">vía propia</Text>
-              </View>
-              <View className="flex-row items-center gap-2">
-                <View className="w-5 flex-row gap-[3px]">
-                  <View
-                    className="h-1 flex-[2] rounded-sm"
-                    style={{ backgroundColor: LANE_COLOR }}
-                  />
-                  <View className="h-1 flex-1 rounded-sm" style={{ backgroundColor: LANE_COLOR }} />
-                </View>
-                <Text className="text-[11px] text-neutral-300">carril pintado</Text>
-              </View>
-              <View className="flex-row items-center gap-2">
-                <View className="w-5 flex-row gap-[3px]">
-                  <View
-                    className="h-1 flex-1 rounded-sm"
-                    style={{ backgroundColor: SHARED_COLOR }}
-                  />
-                  <View
-                    className="h-1 flex-1 rounded-sm"
-                    style={{ backgroundColor: SHARED_COLOR }}
-                  />
-                </View>
-                <Text className="text-[11px] text-neutral-400">compartida con autos</Text>
-              </View>
-            </View>
-          </View>
-
-          <Speedometer speedKmh={smoothedSpeed} />
+        <View
+          className="m-4 self-start"
+          style={{
+            backgroundColor: SURFACE,
+            borderRadius: RADIUS,
+            borderWidth: 1,
+            borderColor: BORDER,
+            paddingHorizontal: 12,
+            paddingVertical: 7,
+          }}
+        >
+          <Text
+            style={{
+              fontFamily: FONT.semibold,
+              fontSize: 12,
+              letterSpacing: 3.2,
+              color: INK,
+            }}
+          >
+            CHASQUI
+          </Text>
         </View>
       </SafeAreaView>
 
       <SafeAreaView className="absolute inset-x-0 bottom-0" pointerEvents="box-none">
-        <View className="m-3.5 gap-2.5">
+        <View className="m-4 gap-3" pointerEvents="box-none">
+          <View className="flex-row items-end justify-between gap-3" pointerEvents="box-none">
+            {isLegendOpen ? (
+              <View className="flex-1" style={{ maxWidth: 300 }}>
+                <Legend />
+              </View>
+            ) : (
+              <View />
+            )}
+
+            <MapControls
+              mode={mode}
+              onToggleMode={toggleMode}
+              isLegendOpen={isLegendOpen}
+              onToggleLegend={() => setIsLegendOpen((open) => !open)}
+            />
+          </View>
+
           {notice ? (
-            <View className="rounded-2xl bg-neutral-950/90 px-4 py-3" pointerEvents="none">
-              <Text className="text-[12px] leading-4 text-neutral-300">{notice}</Text>
+            <View
+              pointerEvents="none"
+              style={{
+                backgroundColor: SURFACE,
+                borderRadius: RADIUS,
+                borderWidth: 1,
+                borderColor: BORDER,
+                paddingHorizontal: 14,
+                paddingVertical: 11,
+              }}
+            >
+              <Text
+                style={{
+                  fontFamily: FONT.regular,
+                  fontSize: 12.5,
+                  lineHeight: 17,
+                  color: INK_SECONDARY,
+                }}
+              >
+                {notice}
+              </Text>
             </View>
           ) : null}
 
-          <View className="self-end">
-            <CameraModeButton mode={mode} onPress={toggleMode} />
-          </View>
+          <TripDock speedKmh={smoothedSpeed} trip={trip} />
         </View>
       </SafeAreaView>
+
+      {trip.status === 'finished' ? (
+        <View style={StyleSheet.absoluteFill}>
+          <TripSummary trip={trip} />
+        </View>
+      ) : null}
     </View>
   )
 }
