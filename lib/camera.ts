@@ -8,20 +8,13 @@ const FOLLOW_ZOOM = 16
 /** Duración de cada tramo de la animación de cámara, en milisegundos. */
 const EASE_MS = 300
 
-/**
- * Grados que tiene que girar el rumbo para mover el mapa.
- *
- * El filtro de la brújula entrega un valor nuevo cada 50 ms. Sin
- * umbral el mapa recibiría veinte animaciones por segundo.
- */
+/** Grados de giro que mueven el mapa: la brújula entrega un valor cada 50 ms. */
 const MIN_BEARING_DELTA_DEG = 3
 
-/**
- * Qué hace la cámara con la posición del ciclista.
- *
- * - `free`: no lo sigue, y el mapa solo gira si lo giran con dos dedos
- * - `follow-heading`: lo centra y gira el mapa hacia donde mira
- */
+/** Recorte superior en dp: baja al ciclista en pantalla para ver más calle por delante. */
+const LOOK_AHEAD_DP = 100
+
+/** `free` no sigue al ciclista; `follow-heading` lo centra y gira el mapa hacia donde mira. */
 export type CameraMode = 'free' | 'follow-heading'
 
 type FollowCamera = {
@@ -37,24 +30,22 @@ type FollowCameraOptions = {
   point: Point | null
   /** Rumbo ya suavizado de la brújula, en grados horarios desde el norte. */
   headingDegrees: number | null
+  /** Alto del dock en dp: la cámara centra al ciclista en el mapa que queda visible. */
+  bottomInsetDp: number
 }
 
-/**
- * Mantiene la cámara sobre el ciclista mientras el modo lo pida.
- *
- * Arranca siguiendo, así el primer fix del GPS ya centra el mapa.
- */
+/** Mantiene la cámara sobre el ciclista. Arranca siguiendo: el primer fix ya centra. */
 export function useFollowCamera({
   cameraRef,
   point,
   headingDegrees,
+  bottomInsetDp,
 }: FollowCameraOptions): FollowCamera {
   const [mode, setMode] = useState<CameraMode>('follow-heading')
-  const applied = useRef<{ point: Point; bearing: number } | null>(null)
+  const applied = useRef<{ point: Point; bearing: number; inset: number } | null>(null)
 
   const changeMode = useCallback((next: CameraMode) => {
-    // Olvidar lo aplicado obliga a recolocar la cámara al volver a seguir,
-    // aunque el ciclista no se haya movido mientras tanto
+    // Olvidarlo obliga a recolocar la cámara al volver, aunque el ciclista no se haya movido
     applied.current = null
     setMode(next)
   }, [])
@@ -66,8 +57,7 @@ export function useFollowCamera({
 
   const releaseOnGesture = useCallback(
     (event: ViewStateChangeEvent) => {
-      // En Android userInteraction también es true en nuestras animaciones:
-      // lo que las separa es animated (CameraChangeTracker.kt)
+      // En Android userInteraction también es true en nuestras animaciones; animated las separa
       if (!event.userInteraction || event.animated) return
 
       changeMode('free')
@@ -83,16 +73,17 @@ export function useFollowCamera({
     const turned =
       !last || Math.abs(angleDeltaDegrees(last.bearing, bearing)) >= MIN_BEARING_DELTA_DEG
 
-    if (last && last.point === point && !turned) return
+    if (last && last.point === point && last.inset === bottomInsetDp && !turned) return
 
-    applied.current = { point, bearing }
+    applied.current = { point, bearing, inset: bottomInsetDp }
     cameraRef.current?.easeTo({
       center: [point.lng, point.lat],
       zoom: FOLLOW_ZOOM,
       bearing,
       duration: EASE_MS,
+      padding: { top: LOOK_AHEAD_DP, bottom: bottomInsetDp },
     })
-  }, [cameraRef, headingDegrees, mode, point])
+  }, [bottomInsetDp, cameraRef, headingDegrees, mode, point])
 
   return { mode, toggleMode, releaseOnGesture }
 }
