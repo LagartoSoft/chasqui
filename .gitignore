@@ -6,3 +6,7 @@ ios/
 *.apk
 *.keystore
 .DS_Store
+
+# candidatas de icono hasta que la elegida entre en assets/
+*.jpeg
+*.jpg
