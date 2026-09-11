@@ -11,16 +11,16 @@ español.
 ## Cómo se reparte
 
 - **`lib/` no importa de `components/`.** Va en un solo sentido.
-- **Un hook por tema**: `location`, `heading`, `speed`, `trip`, `camera`. Si un hook empieza a
-  hacer dos cosas, son dos hooks.
+- **Un hook por tema**: `location`, `heading`, `speed`, `trip`, `camera`. Si un hook empieza a hacer
+  dos cosas, son dos hooks.
 - **`app/` y `components/` no calculan.** Componen lo que `lib/` ya resolvió.
 - **No se exporta lo que nadie importa.**
 - Antes de escribir un panel oscuro, mirá `components/panel.tsx`: ya existe.
 
 ## Comentarios
 
-Solo para lo que el código **no puede** decir: una trampa de la plataforma, el porqué de un
-número puesto a ojo, una decisión que sorprendería.
+Solo para lo que el código **no puede** decir: una trampa de la plataforma, el porqué de un número
+puesto a ojo, una decisión que sorprendería.
 
 - **Una sola línea, siempre.** Si no entra, el problema es el código: ponele otro nombre o partilo.
 - **Nunca parafrasees la línea de abajo.**
@@ -30,11 +30,11 @@ número puesto a ojo, una decisión que sorprendería.
 ```ts
 // ❌ parafrasea
 // Suma la distancia
-setDistanceM((total) => total + step)
+setDistanceM((total) => total + step);
 
 // ✅ dice lo que el código no puede
 // Peor precisión que esta se descarta: el primer fix suele ser el de tu casa.
-const MAX_ACCURACY_M = 20
+const MAX_ACCURACY_M = 20;
 ```
 
 **Dónde sí**: en `lib/`, donde viven las manías del GPS, del magnetómetro y de MapLibre; y en

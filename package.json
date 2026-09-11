@@ -8,8 +8,8 @@
     "android": "expo run:android",
     "prebuild": "expo prebuild --platform android",
     "apk": "scripts/apk.sh",
-    "lint": "biome check .",
-    "lint:fix": "biome check --write .",
+    "format": "biome check --write . && prettier --write \"**/*.md\"",
+    "lint": "biome check . && prettier --check \"**/*.md\"",
     "typecheck": "tsc --noEmit",
     "check": "bun run lint && bun run typecheck"
   },
@@ -44,6 +44,7 @@
     "@tailwindcss/postcss": "^4.3.3",
     "@types/react": "~19.2.4",
     "babel-preset-expo": "^57.0.11",
+    "prettier": "^3.9.6",
     "typescript": "~6.0.3"
   }
 }

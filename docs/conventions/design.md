@@ -1,7 +1,7 @@
 # Diseño
 
-El lenguaje de [lagartosoft.org](https://lagartosoft.org): **Geist**, superficies monocromas,
-bordes de un píxel, esquinas de 2 a 6. Nada de sombras ni de pastillas redondeadas.
+El lenguaje de [lagartosoft.org](https://lagartosoft.org): **Geist**, superficies monocromas, bordes
+de un píxel, esquinas de 2 a 6. Nada de sombras ni de pastillas redondeadas.
 
 ## El color
 
