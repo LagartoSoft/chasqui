@@ -8,11 +8,11 @@ import { distanceMeters, type Point } from './geo.ts'
 /** Metros a recorrer para que llegue una posición nueva. */
 const MIN_DISPLACEMENT_M = 5
 
-/** Una lectura más vieja que esto ya no sirve de referencia, en milisegundos. */
-const STALE_MS = 15_000
+/** Pasado esto la lectura que tenemos ya no vale ni de referencia, en milisegundos. */
+const STALE_MS = 120_000
 
-/** Diferencia de precisión que se considera empate, en metros. */
-const SAME_ACCURACY_M = 10
+/** Cuánto peor puede ser una lectura nueva antes de descartarla de plano, en metros. */
+const MUCH_WORSE_M = 200
 
 /** Velocidad desde la que el rumbo del movimiento es de fiar, en km/h. */
 export const COURSE_MIN_KMH = 6
@@ -34,17 +34,18 @@ export type CurrentLocation = {
 
 type Fix = { point: Point; at: number; accuracyM: number }
 
-/** El criterio de Android: gana la más precisa, salvo que la que tengamos ya esté vieja. */
+/** El criterio de Android: gana la más precisa, y solo la vejez le gana a la precisión. */
 function isBetter(next: Fix, current: Fix | null): boolean {
   if (!current) return true
 
-  const newer = next.at - current.at
-  if (newer > STALE_MS) return true
+  const age = next.at - current.at
+  if (age > STALE_MS) return true
+  if (age < -STALE_MS) return false
 
-  const sharper = current.accuracyM - next.accuracyM
-  if (sharper > 0) return true
+  const worse = next.accuracyM - current.accuracyM
+  if (worse < 0) return true
 
-  return sharper > -SAME_ACCURACY_M && newer > 0
+  return age > 0 && worse < MUCH_WORSE_M && next.accuracyM <= current.accuracyM
 }
 
 /** Sigue al ciclista con el motor de MapLibre, que usa el proveedor del sistema y no Google. */
@@ -96,6 +97,10 @@ export function useCurrentLocation(): CurrentLocation {
       LocationManager.setMinDisplacement(MIN_DISPLACEMENT_M)
       LocationManager.addListener(onUpdate)
       LocationManager.start()
+
+      // Con el filtro de cinco metros nada llega hasta que te movés: esto ubica ya
+      const known = await LocationManager.getCurrentPosition()
+      if (!cancelled && known) onUpdate(known)
     }
 
     watch()
