@@ -1,3 +1,8 @@
+# Prettier acá solo ve markdown: del código se ocupa Biome y no deben pisarse.
+*
+!*/
+!*.md
+
 node_modules
 android
 build
