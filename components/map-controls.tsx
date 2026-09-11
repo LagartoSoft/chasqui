@@ -1,7 +1,8 @@
 import Feather from '@expo/vector-icons/Feather'
 import { Pressable, View } from 'react-native'
 import type { CameraMode } from '../lib/camera.ts'
-import { BORDER, BRAND, INK_MUTED, RADIUS, SURFACE } from '../lib/theme.ts'
+import { BRAND, INK_MUTED } from '../lib/theme.ts'
+import { Panel } from './panel.tsx'
 
 const SIZE = 46
 
@@ -21,20 +22,17 @@ function Control({ icon, accessibilityLabel, active = false, onPress }: ControlP
   return (
     <Pressable accessibilityRole="button" accessibilityLabel={accessibilityLabel} onPress={onPress}>
       {({ pressed }) => (
-        <View
-          className="items-center justify-center"
+        <Panel
           style={{
             width: SIZE,
             height: SIZE,
-            borderRadius: RADIUS,
-            backgroundColor: SURFACE,
-            borderWidth: 1,
-            borderColor: BORDER,
+            alignItems: 'center',
+            justifyContent: 'center',
             opacity: pressed ? 0.7 : 1,
           }}
         >
           <Feather name={icon} size={19} color={active ? BRAND : INK_MUTED} />
-        </View>
+        </Panel>
       )}
     </Pressable>
   )

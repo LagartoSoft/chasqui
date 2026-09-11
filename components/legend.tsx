@@ -1,6 +1,7 @@
 import { Text, View } from 'react-native'
 import { LANE_DASH, SHARED_DASH, SHARED_ON_DARK, TRACK_ON_DARK } from '../lib/map.ts'
-import { BORDER, FONT, INK_SECONDARY, RADIUS, SURFACE } from '../lib/theme.ts'
+import { FONT, INK_SECONDARY } from '../lib/theme.ts'
+import { Panel } from './panel.tsx'
 
 type Entry = {
   id: string
@@ -30,17 +31,7 @@ function segmentsFor({ id, dash }: Entry) {
 /** Lo único con color en toda la interfaz: la red, que es el dato. */
 export function Legend() {
   return (
-    <View
-      style={{
-        backgroundColor: SURFACE,
-        borderRadius: RADIUS,
-        borderWidth: 1,
-        borderColor: BORDER,
-        paddingHorizontal: 14,
-        paddingVertical: 13,
-        gap: 11,
-      }}
-    >
+    <Panel style={{ paddingHorizontal: 14, paddingVertical: 13, gap: 11 }}>
       {ENTRIES.map((entry) => (
         <View key={entry.id} className="flex-row items-center gap-3">
           <View className="flex-row" style={{ width: 24 }}>
@@ -59,6 +50,6 @@ export function Legend() {
           </Text>
         </View>
       ))}
-    </View>
+    </Panel>
   )
 }

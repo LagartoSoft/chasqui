@@ -1,10 +1,9 @@
 import Feather from '@expo/vector-icons/Feather'
 import { Pressable, Text, View } from 'react-native'
-import { BRAND, FONT, INK, ON_SOLID, RADIUS, RADIUS_TIGHT, SURFACE } from '../lib/theme.ts'
+import { BORDER, BRAND, FONT, INK, ON_SOLID, RADIUS_TIGHT } from '../lib/theme.ts'
 import { formatDuration, formatKm, type Trip } from '../lib/trip.ts'
 import { EMPTY, Field } from './field.tsx'
-
-const BORDER_COLOR = '#2B2B2B'
+import { Panel } from './panel.tsx'
 
 const AN_HOUR_MS = 3_600_000
 
@@ -35,7 +34,7 @@ function Action({ icon, label, tone = 'quiet', onPress }: ActionProps) {
             borderRadius: RADIUS_TIGHT,
             backgroundColor: fill,
             borderWidth: 1,
-            borderColor: tone === 'quiet' ? BORDER_COLOR : fill,
+            borderColor: tone === 'quiet' ? BORDER : fill,
             opacity: pressed ? 0.72 : 1,
           }}
         >
@@ -66,15 +65,7 @@ export function TripDock({ speedKmh, trip }: TripDockProps) {
   const isLive = trip.status === 'recording' || trip.status === 'paused'
 
   return (
-    <View
-      style={{
-        backgroundColor: SURFACE,
-        borderRadius: RADIUS,
-        borderWidth: 1,
-        borderColor: BORDER_COLOR,
-        overflow: 'hidden',
-      }}
-    >
+    <Panel style={{ overflow: 'hidden' }}>
       <View className="flex-row items-end justify-between px-4 pt-3.5 pb-4">
         <Field
           label="Velocidad"
@@ -96,7 +87,7 @@ export function TripDock({ speedKmh, trip }: TripDockProps) {
         ) : null}
       </View>
 
-      <View style={{ height: 1, backgroundColor: BORDER_COLOR }} />
+      <View style={{ height: 1, backgroundColor: BORDER }} />
 
       <View className="flex-row gap-2 p-2.5">
         {trip.status === 'idle' ? (
@@ -117,6 +108,6 @@ export function TripDock({ speedKmh, trip }: TripDockProps) {
           </>
         ) : null}
       </View>
-    </View>
+    </Panel>
   )
 }
