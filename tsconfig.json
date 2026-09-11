@@ -27,8 +27,8 @@
     "**/*.tsx",
     ".expo/types/**/*.ts",
     "expo-env.d.ts",
-    "nativewind-env.d.ts",
-    "images.d.ts"
+    "types.d.ts",
+    "nativewind-env.d.ts"
   ],
-  "exclude": ["node_modules", "android"]
+  "exclude": ["node_modules", "android", "build"]
 }
