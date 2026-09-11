@@ -1,6 +1,6 @@
 import * as Location from 'expo-location'
 import { useEffect, useRef, useState } from 'react'
-import { smoothHeadingDegrees } from './geo.ts'
+import { angleDeltaDegrees, normalizeDegrees, smoothHeadingDegrees } from './geo.ts'
 import { COURSE_MIN_KMH } from './location.ts'
 
 /** Cada cuánto avanza el filtro: Android calla en cuanto el rumbo deja de cambiar. */
@@ -14,6 +14,9 @@ const MIN_TRUSTED_ACCURACY = 2
 
 /** Espera antes de dar la brújula por ausente: sin magnetómetro no hay error, hay silencio. */
 const SENSOR_TIMEOUT_MS = 6_000
+
+/** Peso de cada muestra al aprender la desviación. Lento: es un sesgo, no ruido. */
+const OFFSET_SMOOTHING = 0.05
 
 type HeadingInput = {
   enabled: boolean
@@ -29,7 +32,7 @@ export type Heading = {
   needsCalibration: boolean
 }
 
-/** Pedaleando usa el rumbo del GPS; parado, la brújula. El teléfono va fijo al manubrio. */
+/** La brújula manda, pero pedaleando aprende cuánto miente comparándose con el rumbo del GPS. */
 export function useHeading({ enabled, courseDegrees, speedKmh }: HeadingInput): Heading {
   const [degrees, setDegrees] = useState<number | null>(null)
   const [hasCompass, setHasCompass] = useState(true)
@@ -39,9 +42,18 @@ export function useHeading({ enabled, courseDegrees, speedKmh }: HeadingInput): 
   const smoothed = useRef<number | null>(null)
   const readings = useRef(0)
 
+  const [corrected, setCorrected] = useState(false)
+  const offset = useRef<number | null>(null)
   const moving = speedKmh !== null && speedKmh >= COURSE_MIN_KMH
-  const course = useRef<number | null>(null)
-  course.current = moving ? courseDegrees : null
+
+  useEffect(() => {
+    if (!moving || courseDegrees === null || compass.current === null) return
+
+    // El manubrio apunta a donde va la bici: lo que sobra es la desviación de la brújula
+    const bias = normalizeDegrees(angleDeltaDegrees(compass.current, courseDegrees))
+    offset.current = smoothHeadingDegrees(offset.current, bias, OFFSET_SMOOTHING)
+    setCorrected(true)
+  }, [courseDegrees, moving])
 
   useEffect(() => {
     if (!enabled) return
@@ -52,10 +64,9 @@ export function useHeading({ enabled, courseDegrees, speedKmh }: HeadingInput): 
     const timeout = setTimeout(() => setHasCompass(false), SENSOR_TIMEOUT_MS)
 
     const tick = setInterval(() => {
-      // El rumbo del movimiento manda sobre el magnetómetro, que se descalibra
-      const target = course.current ?? compass.current
-      if (target === null) return
+      if (compass.current === null) return
 
+      const target = normalizeDegrees(compass.current + (offset.current ?? 0))
       smoothed.current = smoothHeadingDegrees(smoothed.current, target)
       setDegrees(Math.round(smoothed.current) % 360)
     }, TICK_MS)
@@ -87,5 +98,6 @@ export function useHeading({ enabled, courseDegrees, speedKmh }: HeadingInput): 
     }
   }, [enabled])
 
-  return { degrees, hasCompass, needsCalibration: needsCalibration && !moving }
+  // Con la desviación aprendida ya no hace falta que el usuario calibre a mano
+  return { degrees, hasCompass, needsCalibration: needsCalibration && !corrected }
 }
