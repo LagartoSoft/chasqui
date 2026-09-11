@@ -32,6 +32,16 @@ scripts/      apk.sh
   forma.
 - **Va firmado con la clave de depuración de Expo.** Sirve para probar y para nada más.
 - **La app corre en teléfonos sin servicios de Google.** Nada puede depender de ellos.
+- **Hay valores puestos a ojo que solo se afinan pedaleando**, no en el escritorio. Cambiarlos sin
+  probarlos en la calle no es una mejora:
+
+| Dónde             | Qué                         | Qué pasa si se mueve                              |
+| ----------------- | --------------------------- | ------------------------------------------------- |
+| `lib/geo.ts`      | `HEADING_SMOOTHING` `0.2`   | Más, el cono tiembla; menos, va con retraso       |
+| `lib/camera.ts`   | `MIN_BEARING_DELTA_DEG` `3` | Menos, el mapa gira sin parar                     |
+| `lib/camera.ts`   | `LOOK_AHEAD_DP` `100`       | Cuánta calle ves por delante                      |
+| `lib/location.ts` | `COURSE_MIN_KMH` `6`        | Desde qué velocidad se corrige la brújula         |
+| `lib/heading.ts`  | `OFFSET_SMOOTHING` `0.05`   | Cuánto tarda la brújula en aprender su desviación |
 
 ## Las convenciones
 

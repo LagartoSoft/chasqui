@@ -96,5 +96,8 @@ están en [`docs/conventions/`](docs/conventions/), una por tema.
 ## Pendiente
 
 - Elegir licencia.
+- **Offline del mapa de fondo.** Las ciclovías ya van dentro; las calles no. El estilo del mapa es
+  una URL y podría ser un objeto en el código, para que sin señal se dibuje igual la red sobre un
+  fondo liso.
 - Firmar con un keystore propio. Hoy va con la clave de depuración de Expo: sirve para probarlo y
   para nada más, porque un APK firmado con otra clave no se instala encima del anterior.
