@@ -52,3 +52,23 @@ export function smoothHeadingDegrees(
 
   return normalizeDegrees(toDegrees(Math.atan2(sin, cos)))
 }
+
+/** Radio medio de la Tierra, en metros. */
+const EARTH_RADIUS_M = 6_371_008.8
+
+/**
+ * Distancia entre dos puntos sobre la superficie, en metros.
+ *
+ * @remarks Haversine. A escala de una ciudad el error frente a una elipsoide
+ * es de centímetros, y cuesta una fracción de lo que cuesta Vincenty.
+ */
+export function distanceMeters(from: Point, to: Point): number {
+  const dLat = toRadians(to.lat - from.lat)
+  const dLng = toRadians(to.lng - from.lng)
+  const fromLat = toRadians(from.lat)
+  const toLat = toRadians(to.lat)
+
+  const a = Math.sin(dLat / 2) ** 2 + Math.sin(dLng / 2) ** 2 * Math.cos(fromLat) * Math.cos(toLat)
+
+  return 2 * EARTH_RADIUS_M * Math.asin(Math.sqrt(a))
+}
