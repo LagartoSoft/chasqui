@@ -1,5 +1,8 @@
 import { Text, View } from 'react-native'
-import { FONT, INK, LABEL } from '../lib/theme.ts'
+import { FONT, INK, INK_MUTED, LABEL } from '../lib/theme.ts'
+
+/** Lo que se muestra cuando todavía no hay lectura. */
+export const EMPTY = '—'
 
 type FieldProps = {
   label: string
@@ -11,6 +14,8 @@ type FieldProps = {
 /** Una etiqueta en versalitas encima de su cifra. La única unidad del HUD. */
 export function Field({ label, value, unit, size = 'normal' }: FieldProps) {
   const hero = size === 'hero'
+  // El guion de «sin dato» en gris: en blanco y a 46 px parece una raya suelta
+  const isEmpty = value === EMPTY
 
   return (
     <View style={{ gap: hero ? 2 : 5 }}>
@@ -22,7 +27,7 @@ export function Field({ label, value, unit, size = 'normal' }: FieldProps) {
             fontSize: hero ? 46 : 19,
             lineHeight: hero ? 50 : 23,
             letterSpacing: hero ? -1.8 : -0.4,
-            color: INK,
+            color: isEmpty ? INK_MUTED : INK,
             fontVariant: ['tabular-nums'],
           }}
         >

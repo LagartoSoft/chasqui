@@ -2,7 +2,7 @@ import Feather from '@expo/vector-icons/Feather'
 import { Pressable, Text, View } from 'react-native'
 import { FONT, INK, INK_MUTED, RADIUS, RADIUS_TIGHT, SURFACE } from '../lib/theme.ts'
 import { formatDuration, formatKm, type Trip } from '../lib/trip.ts'
-import { Field } from './field.tsx'
+import { EMPTY, Field } from './field.tsx'
 
 const BORDER_COLOR = '#2B2B2B'
 
@@ -74,7 +74,7 @@ export function TripDock({ speedKmh, trip }: TripDockProps) {
       <View className="flex-row items-end justify-between px-4 pt-3.5 pb-4">
         <Field
           label="Velocidad"
-          value={speedKmh === null ? '—' : String(Math.round(speedKmh))}
+          value={speedKmh === null ? EMPTY : String(Math.round(speedKmh))}
           unit="KM/H"
           size="hero"
         />

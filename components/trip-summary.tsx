@@ -12,6 +12,7 @@ import {
   SURFACE_RAISED,
 } from '../lib/theme.ts'
 import { formatDuration, formatKm, type Trip } from '../lib/trip.ts'
+import { EMPTY } from './field.tsx'
 
 const AN_HOUR_MS = 3_600_000
 
@@ -89,7 +90,7 @@ export function TripSummary({ trip }: { trip: Trip }) {
         />
         <Line
           label="Media"
-          value={trip.averageKmh === null ? '—' : trip.averageKmh.toFixed(1)}
+          value={trip.averageKmh === null ? EMPTY : trip.averageKmh.toFixed(1)}
           unit="KM/H"
         />
 
