@@ -75,6 +75,7 @@ export function RiderPuck({ point, headingDegrees, accuracyM }: RiderPuckProps) 
               // Alineado al mapa: el cono también tiene que girar cuando gire el mapa
               'icon-rotation-alignment': 'map',
               'icon-rotate': headingDegrees,
+              'icon-size': 1.25,
             }}
           />
         )}
@@ -83,7 +84,11 @@ export function RiderPuck({ point, headingDegrees, accuracyM }: RiderPuckProps) 
           id="chasqui-rider-halo"
           type="circle"
           source={RIDER_SOURCE}
-          paint={{ 'circle-radius': 8, 'circle-color': '#FFFFFF', 'circle-pitch-alignment': 'map' }}
+          paint={{
+            'circle-radius': 11,
+            'circle-color': '#FFFFFF',
+            'circle-pitch-alignment': 'map',
+          }}
         />
 
         <Layer
@@ -91,7 +96,7 @@ export function RiderPuck({ point, headingDegrees, accuracyM }: RiderPuckProps) 
           type="circle"
           source={RIDER_SOURCE}
           paint={{
-            'circle-radius': 5.5,
+            'circle-radius': 7.5,
             'circle-color': RIDER_COLOR,
             'circle-pitch-alignment': 'map',
           }}

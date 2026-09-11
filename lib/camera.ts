@@ -2,8 +2,8 @@ import type { CameraRef, ViewStateChangeEvent } from '@maplibre/maplibre-react-n
 import { type RefObject, useCallback, useEffect, useRef, useState } from 'react'
 import { angleDeltaDegrees, type Point } from './geo.ts'
 
-/** Zoom al que se sigue al ciclista: entra la cuadra y la esquina siguiente. */
-const FOLLOW_ZOOM = 16
+/** Zoom al que se sigue al ciclista: unas cuatro cuadras de lado a lado. */
+const FOLLOW_ZOOM = 17
 
 /** Duración de cada tramo de la animación de cámara, en milisegundos. */
 const EASE_MS = 300
