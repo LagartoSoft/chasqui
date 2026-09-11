@@ -11,10 +11,15 @@ const CONE_IMAGE = 'chasqui-heading-cone'
 /** Metros por píxel a zoom 0 en la latitud de Lima. */
 const METERS_PER_PIXEL_AT_ZOOM_0 = 153_054
 
+/** Tope del círculo de duda, en metros: más allá solo sería una mancha azul inútil. */
+const MAX_DRAWN_ACCURACY_M = 150
+
 type CircleRadius = NonNullable<NonNullable<CircleLayerSpecification['paint']>['circle-radius']>
 
 /** Pasa la precisión del GPS a píxeles: cada zoom parte en dos el metro por píxel. */
-function accuracyRadius(accuracyM: number): CircleRadius {
+function accuracyRadius(reported: number): CircleRadius {
+  const accuracyM = Math.min(reported, MAX_DRAWN_ACCURACY_M)
+
   return [
     'interpolate',
     ['exponential', 2],

@@ -4,7 +4,8 @@ import type { CameraMode } from '../lib/camera.ts'
 import { BRAND, INK_MUTED } from '../lib/theme.ts'
 import { Panel } from './panel.tsx'
 
-const SIZE = 46
+/** El mínimo que pide Android, y acá se toca con guantes. */
+const SIZE = 48
 
 const label: Record<CameraMode, string> = {
   free: 'Seguir tu posición y girar el mapa',

@@ -29,10 +29,13 @@ export const FONT = {
   semibold: 'Geist_600SemiBold',
 } as const
 
-/** Mayúsculas pequeñas y espaciadas: la única jerarquía que necesita un HUD. */
+/**
+ * Mayúsculas pequeñas y espaciadas: la única jerarquía que necesita un HUD.
+ */
 export const LABEL = {
   fontFamily: FONT.medium,
   fontSize: 10,
   letterSpacing: 1.4,
-  color: INK_MUTED,
+  // A diez píxeles y al sol, INK_MUTED da 3,6:1 y no se lee. Este da 7,7:1
+  color: INK_SECONDARY,
 } as const

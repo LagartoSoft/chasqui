@@ -30,7 +30,7 @@ function Action({ icon, label, tone = 'quiet', onPress }: ActionProps) {
         <View
           className="flex-row items-center justify-center gap-2"
           style={{
-            height: 44,
+            height: 48,
             borderRadius: RADIUS_TIGHT,
             backgroundColor: fill,
             borderWidth: 1,
