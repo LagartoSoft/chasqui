@@ -3,10 +3,9 @@ node_modules/
 expo-env.d.ts
 android/
 ios/
+build/
 *.apk
 *.keystore
-.DS_Store
-
-# candidatas de icono hasta que la elegida entre en assets/
-*.jpeg
 *.jpg
+*.jpeg
+.DS_Store

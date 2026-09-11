@@ -1,13 +1,13 @@
 {
   "name": "chasqui",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "private": true,
   "main": "expo-router/entry",
   "scripts": {
     "start": "expo start",
     "android": "expo run:android",
     "prebuild": "expo prebuild --platform android",
-    "apk": "android/gradlew -p android assembleRelease -PreactNativeArchitectures=arm64-v8a,armeabi-v7a",
+    "apk": "scripts/apk.sh",
     "lint": "biome check .",
     "lint:fix": "biome check --write .",
     "typecheck": "tsc --noEmit",
