@@ -3,6 +3,7 @@ import { StyleSheet, Text, View } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import cycleways from '../assets/cycleways.json'
 import { RiderPuck } from '../components/rider-puck.tsx'
+import { useHeading } from '../lib/heading.ts'
 import { useCurrentLocation } from '../lib/location.ts'
 import {
   CASING_COLOR,
@@ -24,11 +25,28 @@ import {
 
 const INITIAL_ZOOM = 14
 
+type NoticeState = {
+  isLocationDenied: boolean
+  hasCompass: boolean
+  needsCalibration: boolean
+}
+
+function noticeFor({ isLocationDenied, hasCompass, needsCalibration }: NoticeState) {
+  if (isLocationDenied) return 'Sin permiso de ubicación no se puede mostrar dónde estás.'
+  if (!hasCompass) return 'Este teléfono no tiene brújula: no puede mostrar hacia dónde mirás.'
+  if (needsCalibration) return 'Brújula perdida. Mové el teléfono dibujando un ocho en el aire.'
+  return null
+}
+
 export default function MapScreen() {
   const { permission, point, accuracyM } = useCurrentLocation()
+  const { degrees, hasCompass, needsCalibration } = useHeading(permission === 'granted')
 
-  const notice =
-    permission === 'denied' ? 'Sin permiso de ubicación no se puede mostrar dónde estás.' : null
+  const notice = noticeFor({
+    isLocationDenied: permission === 'denied',
+    hasCompass,
+    needsCalibration,
+  })
 
   return (
     <View className="flex-1">
@@ -80,7 +98,7 @@ export default function MapScreen() {
             paint={{ 'line-color': TRACK_COLOR, 'line-width': TRACK_WIDTH }}
           />
         </GeoJSONSource>
-        {point ? <RiderPuck point={point} accuracyM={accuracyM} /> : null}
+        {point ? <RiderPuck point={point} headingDegrees={degrees} accuracyM={accuracyM} /> : null}
       </MapView>
 
       <SafeAreaView className="absolute inset-x-0 top-0" pointerEvents="none">
