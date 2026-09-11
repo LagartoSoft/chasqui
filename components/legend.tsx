@@ -1,5 +1,5 @@
 import { Text, View } from 'react-native'
-import { LANE_COLOR, LANE_DASH, SHARED_COLOR, SHARED_DASH, TRACK_COLOR } from '../lib/map.ts'
+import { LANE_DASH, SHARED_DASH, SHARED_ON_DARK, TRACK_ON_DARK } from '../lib/map.ts'
 import { BORDER, FONT, INK_SECONDARY, RADIUS, SURFACE } from '../lib/theme.ts'
 
 type Entry = {
@@ -11,9 +11,9 @@ type Entry = {
 }
 
 const ENTRIES: Entry[] = [
-  { id: 'track', color: TRACK_COLOR, dash: null, label: 'Vía propia, separada del tráfico' },
-  { id: 'lane', color: LANE_COLOR, dash: LANE_DASH, label: 'Carril pintado sobre la calzada' },
-  { id: 'shared', color: SHARED_COLOR, dash: SHARED_DASH, label: 'Compartida con autos' },
+  { id: 'track', color: TRACK_ON_DARK, dash: null, label: 'Vía propia, separada del tráfico' },
+  { id: 'lane', color: TRACK_ON_DARK, dash: LANE_DASH, label: 'Carril pintado sobre la calzada' },
+  { id: 'shared', color: SHARED_ON_DARK, dash: SHARED_DASH, label: 'Compartida con autos' },
 ]
 
 /** Repite el patrón de guiones hasta llenar la muestra. */

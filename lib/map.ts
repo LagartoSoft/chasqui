@@ -13,16 +13,30 @@ export const IS_TRACK: FilterSpecification = ['==', ['get', 'kind'], 'track']
 export const IS_LANE: FilterSpecification = ['==', ['get', 'kind'], 'lane']
 export const IS_SHARED: FilterSpecification = ['==', ['get', 'kind'], 'shared']
 
-/** Verde: tenés la vía para vos, separada del tráfico. */
-export const TRACK_COLOR = '#0E9F6E'
-/** El mismo verde punteado: es infraestructura, pero solo pintura. */
-export const LANE_COLOR = '#0E9F6E'
-/** Ámbar: compartís el asfalto con los autos. */
-export const SHARED_COLOR = '#D97706'
+/**
+ * La red usa dos tonos, no tres: el tipo de separación lo dice el guionado.
+ *
+ * @remarks Van rebajados y profundos a propósito. La interfaz es monocroma,
+ * así que estos son el único color del producto y no pueden gritar.
+ */
+export const TRACK_COLOR = '#0A7C63'
+/** El mismo tono punteado: es infraestructura, pero solo pintura. */
+export const LANE_COLOR = '#0A7C63'
+/** Ámbar quemado: compartís el asfalto con los autos. */
+export const SHARED_COLOR = '#B4670F'
 /** Halo blanco por debajo, para que la línea no se pierda sobre el mapa base. */
 export const CASING_COLOR = '#FFFFFF'
-/** Azul: en este mapa el verde y el ámbar ya son la red ciclista. */
-export const RIDER_COLOR = '#2563EB'
+/** Azul profundo. El punto azul es una convención que no vale la pena romper. */
+export const RIDER_COLOR = '#1E4FD8'
+
+/**
+ * Los mismos tonos, aclarados para la leyenda.
+ *
+ * WHY Los de arriba están calculados contra el mapa claro. Sobre el panel
+ * casi negro se hunden: 3,9:1 de contraste en un trazo de dos píxeles.
+ */
+export const TRACK_ON_DARK = '#2FB894'
+export const SHARED_ON_DARK = '#E09A4A'
 
 type LineWidth = NonNullable<NonNullable<LineLayerSpecification['paint']>['line-width']>
 
