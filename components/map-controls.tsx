@@ -1,7 +1,7 @@
 import Feather from '@expo/vector-icons/Feather'
 import { Pressable, View } from 'react-native'
 import type { CameraMode } from '../lib/camera.ts'
-import { BORDER, INK, INK_MUTED, RADIUS, SURFACE } from '../lib/theme.ts'
+import { BORDER, BRAND, INK_MUTED, RADIUS, SURFACE } from '../lib/theme.ts'
 
 const SIZE = 46
 
@@ -33,7 +33,7 @@ function Control({ icon, accessibilityLabel, active = false, onPress }: ControlP
             opacity: pressed ? 0.7 : 1,
           }}
         >
-          <Feather name={icon} size={19} color={active ? INK : INK_MUTED} />
+          <Feather name={icon} size={19} color={active ? BRAND : INK_MUTED} />
         </View>
       )}
     </Pressable>

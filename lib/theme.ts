@@ -14,6 +14,11 @@ export const INK_SECONDARY = '#A8A8A8'
 export const INK_MUTED = '#6E6E6E'
 
 /** 6 px es el radio grande de lagartosoft; 2 px el normal. */
+/** El verde de la red, el único acento. Se gasta en la acción principal y en nada más. */
+export const BRAND = '#2FB894'
+/** Lo que se escribe encima del verde o del blanco. */
+export const ON_SOLID = '#141414'
+
 export const RADIUS = 6
 export const RADIUS_TIGHT = 2
 

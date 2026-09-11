@@ -1,6 +1,15 @@
 import Feather from '@expo/vector-icons/Feather'
 import { Pressable, Text, View } from 'react-native'
-import { FONT, INK, INK_MUTED, RADIUS, RADIUS_TIGHT, SURFACE } from '../lib/theme.ts'
+import {
+  BRAND,
+  FONT,
+  INK,
+  INK_MUTED,
+  ON_SOLID,
+  RADIUS,
+  RADIUS_TIGHT,
+  SURFACE,
+} from '../lib/theme.ts'
 import { formatDuration, formatKm, type Trip } from '../lib/trip.ts'
 import { EMPTY, Field } from './field.tsx'
 
@@ -11,11 +20,15 @@ const AN_HOUR_MS = 3_600_000
 type ActionProps = {
   icon: keyof typeof Feather.glyphMap
   label: string
-  emphasis?: boolean
+  /** `brand` es empezar, `ink` es terminar, `quiet` es todo lo demás. */
+  tone?: 'brand' | 'ink' | 'quiet'
   onPress: () => void
 }
 
-function Action({ icon, label, emphasis = false, onPress }: ActionProps) {
+function Action({ icon, label, tone = 'quiet', onPress }: ActionProps) {
+  const fill = tone === 'brand' ? BRAND : tone === 'ink' ? INK : 'transparent'
+  const text = tone === 'quiet' ? INK : ON_SOLID
+
   return (
     <Pressable
       accessibilityRole="button"
@@ -29,19 +42,19 @@ function Action({ icon, label, emphasis = false, onPress }: ActionProps) {
           style={{
             height: 44,
             borderRadius: RADIUS_TIGHT,
-            backgroundColor: emphasis ? INK : 'transparent',
+            backgroundColor: fill,
             borderWidth: 1,
-            borderColor: emphasis ? INK : BORDER_COLOR,
+            borderColor: tone === 'quiet' ? BORDER_COLOR : fill,
             opacity: pressed ? 0.72 : 1,
           }}
         >
-          <Feather name={icon} size={15} color={emphasis ? '#141414' : INK} />
+          <Feather name={icon} size={15} color={text} />
           <Text
             style={{
               fontFamily: FONT.medium,
               fontSize: 11,
               letterSpacing: 1.3,
-              color: emphasis ? '#141414' : INK,
+              color: text,
             }}
           >
             {label.toUpperCase()}
@@ -95,20 +108,20 @@ export function TripDock({ speedKmh, trip }: TripDockProps) {
 
       <View className="flex-row gap-2 p-2.5">
         {trip.status === 'idle' ? (
-          <Action icon="play" label="Empezar" emphasis onPress={trip.start} />
+          <Action icon="play" label="Empezar" tone="brand" onPress={trip.start} />
         ) : null}
 
         {trip.status === 'recording' ? (
           <>
             <Action icon="pause" label="Pausar" onPress={trip.pause} />
-            <Action icon="square" label="Terminar" emphasis onPress={trip.finish} />
+            <Action icon="square" label="Terminar" tone="ink" onPress={trip.finish} />
           </>
         ) : null}
 
         {trip.status === 'paused' ? (
           <>
-            <Action icon="play" label="Seguir" onPress={trip.resume} />
-            <Action icon="square" label="Terminar" emphasis onPress={trip.finish} />
+            <Action icon="play" label="Seguir" tone="brand" onPress={trip.resume} />
+            <Action icon="square" label="Terminar" tone="ink" onPress={trip.finish} />
           </>
         ) : null}
       </View>
