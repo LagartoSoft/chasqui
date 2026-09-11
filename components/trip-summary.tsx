@@ -13,7 +13,12 @@ import {
 } from '../lib/theme.ts'
 import { formatDuration, formatKm, type Trip } from '../lib/trip.ts'
 
-type Row = { label: string; value: string; unit?: string }
+const AN_HOUR_MS = 3_600_000
+
+type Row = { label: string; value: string; unit: string }
+
+/** La unidad ocupa un ancho fijo, así las tres cifras terminan en la misma columna. */
+const UNIT_WIDTH = 46
 
 function Line({ label, value, unit }: Row) {
   return (
@@ -22,7 +27,7 @@ function Line({ label, value, unit }: Row) {
       style={{ borderTopWidth: 1, borderTopColor: BORDER, paddingVertical: 14 }}
     >
       <Text style={LABEL}>{label}</Text>
-      <View className="flex-row items-baseline gap-1.5">
+      <View className="flex-row items-baseline gap-2">
         <Text
           style={{
             fontFamily: FONT.light,
@@ -30,11 +35,12 @@ function Line({ label, value, unit }: Row) {
             letterSpacing: -1,
             color: INK,
             fontVariant: ['tabular-nums'],
+            textAlign: 'right',
           }}
         >
           {value}
         </Text>
-        {unit ? <Text style={LABEL}>{unit}</Text> : null}
+        <Text style={{ ...LABEL, width: UNIT_WIDTH }}>{unit}</Text>
       </View>
     </View>
   )
@@ -76,7 +82,11 @@ export function TripSummary({ trip }: { trip: Trip }) {
         </Text>
 
         <Line label="Distancia" value={formatKm(trip.distanceM)} unit="KM" />
-        <Line label="Tiempo" value={formatDuration(trip.elapsedMs)} />
+        <Line
+          label="Tiempo"
+          value={formatDuration(trip.elapsedMs)}
+          unit={trip.elapsedMs >= AN_HOUR_MS ? 'H' : 'MIN'}
+        />
         <Line
           label="Media"
           value={trip.averageKmh === null ? '—' : trip.averageKmh.toFixed(1)}
