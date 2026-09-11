@@ -6,6 +6,8 @@ import { Field } from './field.tsx'
 
 const BORDER_COLOR = '#2B2B2B'
 
+const AN_HOUR_MS = 3_600_000
+
 type ActionProps = {
   icon: keyof typeof Feather.glyphMap
   label: string
@@ -78,13 +80,13 @@ export function TripDock({ speedKmh, trip }: TripDockProps) {
         />
 
         {isLive ? (
-          <View className="flex-row gap-6 pb-1">
-            <Field label="Tiempo" value={formatDuration(trip.elapsedMs)} />
-            <Field label="Distancia" value={formatKm(trip.distanceM)} unit="KM" />
+          <View className="flex-row gap-4 pb-1">
             <Field
-              label="Media"
-              value={trip.averageKmh === null ? '—' : trip.averageKmh.toFixed(1)}
+              label="Tiempo"
+              value={formatDuration(trip.elapsedMs)}
+              unit={trip.elapsedMs >= AN_HOUR_MS ? 'H' : 'MIN'}
             />
+            <Field label="Distancia" value={formatKm(trip.distanceM)} unit="KM" />
           </View>
         ) : null}
       </View>
