@@ -8,11 +8,11 @@ import { distanceMeters, type Point } from './geo.ts'
 /** Metros a recorrer para que llegue una posición nueva. */
 const MIN_DISPLACEMENT_M = 5
 
-/** El motor pide posiciones a gps y a network a la vez; las de network no bajan de esto. */
-const MAX_ACCURACY_M = 40
+/** Una lectura más vieja que esto ya no sirve de referencia, en milisegundos. */
+const STALE_MS = 15_000
 
-/** Ninguna bici va a esta velocidad: por encima, las dos lecturas son de proveedores distintos. */
-const MAX_PLAUSIBLE_KMH = 120
+/** Diferencia de precisión que se considera empate, en metros. */
+const SAME_ACCURACY_M = 10
 
 /** Velocidad desde la que el rumbo del movimiento es de fiar, en km/h. */
 export const COURSE_MIN_KMH = 6
@@ -32,7 +32,20 @@ export type CurrentLocation = {
   courseDegrees: number | null
 }
 
-type Fix = { point: Point; at: number }
+type Fix = { point: Point; at: number; accuracyM: number }
+
+/** El criterio de Android: gana la más precisa, salvo que la que tengamos ya esté vieja. */
+function isBetter(next: Fix, current: Fix | null): boolean {
+  if (!current) return true
+
+  const newer = next.at - current.at
+  if (newer > STALE_MS) return true
+
+  const sharper = current.accuracyM - next.accuracyM
+  if (sharper > 0) return true
+
+  return sharper > -SAME_ACCURACY_M && newer > 0
+}
 
 /** Sigue al ciclista con el motor de MapLibre, que usa el proveedor del sistema y no Google. */
 export function useCurrentLocation(): CurrentLocation {
@@ -48,27 +61,29 @@ export function useCurrentLocation(): CurrentLocation {
     let cancelled = false
 
     const onUpdate = ({ coords, timestamp }: MapLibrePosition) => {
-      const next: Point = { lat: coords.latitude, lng: coords.longitude }
+      const next: Fix = {
+        point: { lat: coords.latitude, lng: coords.longitude },
+        at: timestamp,
+        accuracyM: coords.accuracy,
+      }
       const previous = last.current
+      if (!isBetter(next, previous)) return
 
-      // Sin nada en pantalla vale cualquier lectura; después, solo las del gps
-      if (previous && coords.accuracy > MAX_ACCURACY_M) return
-
-      const seconds = previous ? Math.max((timestamp - previous.at) / 1000, 0.001) : 0
-      const meters = previous ? distanceMeters(previous.point, next) : 0
-      const impliedKmh = previous ? (meters / seconds) * MS_TO_KMH : 0
-
-      // Un salto imposible no es movimiento: es que contestó el otro proveedor
-      if (previous && impliedKmh > MAX_PLAUSIBLE_KMH) return
-
-      last.current = { point: next, at: timestamp }
-      setPoint(next)
-      setAccuracyM(coords.accuracy)
+      last.current = next
+      setPoint(next.point)
+      setAccuracyM(next.accuracyM)
+      setCourseDegrees(coords.heading)
 
       // Android manda 0 cuando el proveedor no sabe la velocidad, así que la calculamos
       const reported = coords.speed === null ? 0 : coords.speed * MS_TO_KMH
-      setSpeedKmh(reported > 0 ? reported : previous ? impliedKmh : null)
-      setCourseDegrees(coords.heading)
+      if (reported > 0) {
+        setSpeedKmh(reported)
+        return
+      }
+
+      const seconds = previous ? (next.at - previous.at) / 1000 : 0
+      const meters = previous ? distanceMeters(previous.point, next.point) : 0
+      setSpeedKmh(seconds > 0 ? (meters / seconds) * MS_TO_KMH : null)
     }
 
     async function watch() {
