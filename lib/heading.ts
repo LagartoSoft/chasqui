@@ -25,7 +25,7 @@ type HeadingInput = {
   speedKmh: number | null
 }
 
-export type Heading = {
+type Heading = {
   /** Grados horarios desde el norte, ya suavizados. `null` hasta la primera lectura. */
   degrees: number | null
   hasCompass: boolean

@@ -16,7 +16,7 @@ export function angleDeltaDegrees(from: number, to: number): number {
 }
 
 /** Peso de la lectura nueva, entre 0 y 1: más tiembla, menos va con retraso. */
-export const HEADING_SMOOTHING = 0.2
+const HEADING_SMOOTHING = 0.2
 
 /** Suaviza el rumbo promediando seno y coseno: entre 359° y 1° la media da 180°. */
 export function smoothHeadingDegrees(

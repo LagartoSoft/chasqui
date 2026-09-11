@@ -22,9 +22,9 @@ export const COURSE_MIN_KMH = 6
 
 const MS_TO_KMH = 3.6
 
-export type LocationPermission = 'pending' | 'granted' | 'denied'
+type LocationPermission = 'pending' | 'granted' | 'denied'
 
-export type CurrentLocation = {
+type CurrentLocation = {
   permission: LocationPermission
   point: Point | null
   /** Incertidumbre que reporta el GPS, en metros. */
