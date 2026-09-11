@@ -1,0 +1,18 @@
+{
+  "expo": {
+    "name": "chasqui",
+    "slug": "chasqui",
+    "scheme": "chasqui",
+    "version": "0.1.0",
+    "orientation": "portrait",
+    "userInterfaceStyle": "automatic",
+    "newArchEnabled": true,
+    "android": {
+      "package": "org.lagartosoft.chasqui"
+    },
+    "plugins": ["expo-router", "@maplibre/maplibre-react-native"],
+    "experiments": {
+      "typedRoutes": true
+    }
+  }
+}

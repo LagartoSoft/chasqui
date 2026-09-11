@@ -1,0 +1,4 @@
+[install]
+# Aislado: cada paquete guarda sus dependencias en su propio node_modules, así
+# un import que no está declarado falla acá y no en el bundle de Android.
+linker = "isolated"
