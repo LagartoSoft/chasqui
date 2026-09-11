@@ -108,9 +108,17 @@ Bun · Expo Router · MapLibre Native · NativeWind 5 sobre Tailwind 4 · Geist 
 
 Sin backend, sin base de datos, sin cliente HTTP, sin librería de estado. No hacen falta.
 
+## El icono
+
+`assets/icon.svg` es la fuente: una **greca escalonada** andina, que además se lee como un camino
+subiendo terrazas. Los dos PNG se regeneran desde ahí con `rsvg-convert` — el comando está dentro
+del propio SVG.
+
+Todo el trazo entra en el 61% central del lienzo. No es estética: Android recorta el icono con
+una máscara circular y lo que quede fuera desaparece.
+
 ## Pendiente
 
 - Elegir licencia del repositorio.
-- Icono de la app.
 - Firmar el APK con un keystore propio. Hoy va con la clave de depuración de Expo, así que sirve
   para probarlo y para nada más: un APK firmado con otra clave no se instala encima del anterior.
