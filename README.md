@@ -18,6 +18,7 @@ posterior a 2019 la usa igual.
 - **Hacia dónde mirás**, con un cono que sigue la brújula.
 - **Un botón** que hace que el mapa te siga y gire para que arriba sea siempre hacia donde vas.
 - **Velocímetro** en km/h.
+- **Recorridos**: empezás, pedaleás, terminás, y te muestra distancia, tiempo y media.
 - **La pantalla no se apaga**, porque el teléfono va en el manubrio.
 
 ## Qué no hace, a propósito
@@ -25,7 +26,10 @@ posterior a 2019 la usa igual.
 - **No tiene servidor.** La red ciclista viaja dentro del APK: son 66 KB. No hay API que se caiga,
   ni base de datos, ni nada que pagar.
 - No calcula rutas de A a B. Eso necesita un motor de ruteo, y un motor de ruteo necesita servidor.
-- No graba recorridos, no guarda historial, no tiene cuentas.
+- No guarda los recorridos. El resumen se ve una vez y se va; no hay historial ni cuentas.
+- **El recorrido solo se mide con la app abierta.** La ubicación de MapLibre es de primer plano:
+  si bloqueás la pantalla o salís de la app, la distancia deja de sumar. Medir con la pantalla
+  apagada necesita el permiso de ubicación «todo el tiempo», y eso todavía no está.
 - No busca lugares por nombre.
 - No funciona en iOS.
 
@@ -65,9 +69,21 @@ recompilar, y es a propósito: es el precio de no tener servidor.
 
 Los datos son de OpenStreetMap y sus colaboradores, bajo [ODbL](https://opendatacommons.org/licenses/odbl/).
 
+## Diseño
+
+Toma el lenguaje de [lagartosoft.org](https://lagartosoft.org): **Geist**, superficies
+monocromas, bordes de un píxel y esquinas de 2 a 6 píxeles. Nada de sombras y nada de pastillas
+redondeadas.
+
+La interfaz no tiene ningún color de acento a propósito: **el único color en pantalla es la red
+ciclista**, que es el dato. Los valores viven en `lib/theme.ts` porque MapLibre necesita
+literales.
+
+Los iconos son Feather, de `@expo/vector-icons`: trazo de dos píxeles y nada más.
+
 ## Stack
 
-Bun · Expo Router · MapLibre Native · NativeWind 5 sobre Tailwind 4 · Biome.
+Bun · Expo Router · MapLibre Native · NativeWind 5 sobre Tailwind 4 · Geist · Feather · Biome.
 
 Sin backend, sin base de datos, sin cliente HTTP, sin librería de estado. No hacen falta.
 
