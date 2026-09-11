@@ -1,8 +1,18 @@
-import { Camera, GeoJSONSource, Layer, Map as MapView } from '@maplibre/maplibre-react-native'
-import { StyleSheet, Text, View } from 'react-native'
+import {
+  Camera,
+  type CameraRef,
+  GeoJSONSource,
+  Layer,
+  Map as MapView,
+  type ViewStateChangeEvent,
+} from '@maplibre/maplibre-react-native'
+import { useRef } from 'react'
+import { type NativeSyntheticEvent, StyleSheet, Text, View } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import cycleways from '../assets/cycleways.json'
+import { CameraModeButton } from '../components/camera-mode-button.tsx'
 import { RiderPuck } from '../components/rider-puck.tsx'
+import { useFollowCamera } from '../lib/camera.ts'
 import { useHeading } from '../lib/heading.ts'
 import { useCurrentLocation } from '../lib/location.ts'
 import {
@@ -42,6 +52,17 @@ export default function MapScreen() {
   const { permission, point, accuracyM } = useCurrentLocation()
   const { degrees, hasCompass, needsCalibration } = useHeading(permission === 'granted')
 
+  const cameraRef = useRef<CameraRef>(null)
+  const { mode, toggleMode, releaseOnGesture } = useFollowCamera({
+    cameraRef,
+    point,
+    headingDegrees: degrees,
+  })
+
+  const onRegionWillChange = (event: NativeSyntheticEvent<ViewStateChangeEvent>) => {
+    releaseOnGesture(event.nativeEvent)
+  }
+
   const notice = noticeFor({
     isLocationDenied: permission === 'denied',
     hasCompass,
@@ -50,8 +71,14 @@ export default function MapScreen() {
 
   return (
     <View className="flex-1">
-      <MapView style={StyleSheet.absoluteFill} mapStyle={MAP_STYLE_URL} attribution logo={false}>
-        <Camera initialViewState={{ center: LIMA_CENTER, zoom: INITIAL_ZOOM }} />
+      <MapView
+        style={StyleSheet.absoluteFill}
+        mapStyle={MAP_STYLE_URL}
+        attribution
+        logo={false}
+        onRegionWillChange={onRegionWillChange}
+      >
+        <Camera ref={cameraRef} initialViewState={{ center: LIMA_CENTER, zoom: INITIAL_ZOOM }} />
 
         <GeoJSONSource id={CYCLEWAYS_SOURCE} data={cycleways as GeoJSON.FeatureCollection}>
           <Layer
@@ -128,13 +155,19 @@ export default function MapScreen() {
           </View>
         </View>
       </SafeAreaView>
-      {notice ? (
-        <SafeAreaView className="absolute inset-x-0 bottom-0" pointerEvents="none">
-          <View className="mx-3.5 mb-3.5 rounded-2xl bg-neutral-950/90 px-4 py-3">
-            <Text className="text-[12px] leading-4 text-neutral-300">{notice}</Text>
+      <SafeAreaView className="absolute inset-x-0 bottom-0" pointerEvents="box-none">
+        <View className="m-3.5 gap-2.5">
+          {notice ? (
+            <View className="rounded-2xl bg-neutral-950/90 px-4 py-3" pointerEvents="none">
+              <Text className="text-[12px] leading-4 text-neutral-300">{notice}</Text>
+            </View>
+          ) : null}
+
+          <View className="self-end">
+            <CameraModeButton mode={mode} onPress={toggleMode} />
           </View>
-        </SafeAreaView>
-      ) : null}
+        </View>
+      </SafeAreaView>
     </View>
   )
 }
