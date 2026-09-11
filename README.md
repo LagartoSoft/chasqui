@@ -13,7 +13,8 @@ proveedor del sistema y no del de Google, así que un Huawei posterior a 2019 la
 
 - La red ciclista del Perú entera, **2320 tramos**, en tres trazos: vía propia continua, carril
   pintado punteado, compartida con autos en ámbar.
-- Dónde estás, con el círculo de precisión del GPS y un cono que sigue la brújula.
+- Dónde estás, con el círculo de precisión del GPS y un cono que dice hacia dónde vas: mientras
+  pedaleás lo saca del rumbo del GPS, y parado de la brújula.
 - Un botón que hace que el mapa te siga y gire hacia donde mirás.
 - Velocímetro en km/h.
 - Recorridos: empezás, pedaleás, terminás, y te da distancia, tiempo y media.
