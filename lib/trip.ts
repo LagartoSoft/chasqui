@@ -133,6 +133,9 @@ export function useTrip({ point, accuracyM }: TripInput): Trip {
 /** `4.21` — kilómetros con dos decimales, que es lo que se lee de un vistazo. */
 export const formatKm = (meters: number): string => (meters / M_PER_KM).toFixed(2)
 
+/** La unidad que acompaña a `formatDuration`. */
+export const durationUnit = (ms: number): string => (ms >= MS_PER_HOUR ? 'H' : 'MIN')
+
 /** `12:04`, y `1:02:30` en cuanto pasa de la hora. */
 export function formatDuration(ms: number): string {
   const total = Math.floor(ms / 1000)

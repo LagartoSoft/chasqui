@@ -11,10 +11,8 @@ import {
   RADIUS_TIGHT,
   SURFACE_RAISED,
 } from '../lib/theme.ts'
-import { formatDuration, formatKm, type Trip } from '../lib/trip.ts'
+import { durationUnit, formatDuration, formatKm, type Trip } from '../lib/trip.ts'
 import { EMPTY } from './field.tsx'
-
-const AN_HOUR_MS = 3_600_000
 
 type Row = { label: string; value: string; unit: string }
 
@@ -86,7 +84,7 @@ export function TripSummary({ trip }: { trip: Trip }) {
         <Line
           label="Tiempo"
           value={formatDuration(trip.elapsedMs)}
-          unit={trip.elapsedMs >= AN_HOUR_MS ? 'H' : 'MIN'}
+          unit={durationUnit(trip.elapsedMs)}
         />
         <Line
           label="Media"

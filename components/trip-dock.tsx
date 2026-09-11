@@ -1,11 +1,9 @@
 import Feather from '@expo/vector-icons/Feather'
 import { Pressable, Text, View } from 'react-native'
 import { BORDER, BRAND, FONT, INK, ON_SOLID, RADIUS_TIGHT } from '../lib/theme.ts'
-import { formatDuration, formatKm, type Trip } from '../lib/trip.ts'
+import { durationUnit, formatDuration, formatKm, type Trip } from '../lib/trip.ts'
 import { EMPTY, Field } from './field.tsx'
 import { Panel } from './panel.tsx'
-
-const AN_HOUR_MS = 3_600_000
 
 type ActionProps = {
   icon: keyof typeof Feather.glyphMap
@@ -79,7 +77,7 @@ export function TripDock({ speedKmh, trip }: TripDockProps) {
             <Field
               label="Tiempo"
               value={formatDuration(trip.elapsedMs)}
-              unit={trip.elapsedMs >= AN_HOUR_MS ? 'H' : 'MIN'}
+              unit={durationUnit(trip.elapsedMs)}
               status={trip.status === 'recording' ? 'live' : 'paused'}
             />
             <Field label="Distancia" value={formatKm(trip.distanceM)} unit="KM" />
