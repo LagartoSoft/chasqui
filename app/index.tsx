@@ -6,6 +6,7 @@ import {
   Map as MapView,
   type ViewStateChangeEvent,
 } from '@maplibre/maplibre-react-native'
+import { useKeepAwake } from 'expo-keep-awake'
 import { useRef } from 'react'
 import { type NativeSyntheticEvent, StyleSheet, Text, View } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
@@ -51,6 +52,9 @@ function noticeFor({ isLocationDenied, hasCompass, needsCalibration }: NoticeSta
 }
 
 export default function MapScreen() {
+  // El teléfono va en el portacelular: la pantalla no se puede apagar sola
+  useKeepAwake()
+
   const { permission, point, accuracyM, speedKmh } = useCurrentLocation()
   const { degrees, hasCompass, needsCalibration } = useHeading(permission === 'granted')
   const smoothedSpeed = useSmoothedSpeed(speedKmh)
