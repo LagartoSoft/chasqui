@@ -3,7 +3,7 @@
     "name": "chasqui",
     "slug": "chasqui",
     "scheme": "chasqui",
-    "version": "0.1.0",
+    "version": "1.0.0",
     "orientation": "portrait",
     "userInterfaceStyle": "automatic",
     "icon": "./assets/icon.png",
@@ -12,7 +12,8 @@
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#141414"
-      }
+      },
+      "versionCode": 1
     },
     "plugins": [
       "expo-router",
